@@ -34,7 +34,7 @@ clean course player with progress tracking. Everything stays in your browser.
 ## Quick start
 
 ```bash
-git clone https://github.com/<you>/coursebox && cd coursebox
+git clone https://github.com/Yab112/coursebox && cd coursebox
 npm install
 npm run dev     # open http://localhost:3000 and drop a course zip
 ```
