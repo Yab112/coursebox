@@ -43,7 +43,8 @@ export default function PdfViewer({
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(([e]) => setContainerWidth(e.contentRect.width));
+    // Ignore 0 while hidden, or every page unmounts and the scroll position is lost.
+    const ro = new ResizeObserver(([e]) => e.contentRect.width > 0 && setContainerWidth(e.contentRect.width));
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
@@ -158,6 +159,9 @@ export default function PdfViewer({
           <Document
             file={url}
             options={PDF_OPTIONS}
+            // Suspending would hide the whole viewer each time a page scrolls into range,
+            // collapsing the list and snapping the scroll back to page 1.
+            suspense={false}
             onLoadSuccess={async (pdf) => {
               setNumPages(pdf.numPages);
               pageRefs.current = new Array(pdf.numPages).fill(null);

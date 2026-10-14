@@ -94,7 +94,7 @@ export function ArchiveViewer({ courseId, path }: { courseId: string; path: stri
             <Download /> Download
           </Button>
         </div>
-        <div className="min-h-0 flex-1">
+        <div className="scrollbar-thin min-h-0 flex-1 overflow-auto">
           {!content ? (
             <div className="skeleton h-full w-full" />
           ) : t === "pdf" && content.url ? (
@@ -113,7 +113,7 @@ export function ArchiveViewer({ courseId, path }: { courseId: string; path: stri
           ) : content.text !== undefined ? (
             <pre className="scrollbar-thin h-full overflow-auto bg-surface p-4 font-mono text-[13px] leading-6">{content.text}</pre>
           ) : (
-            <div className="grid h-full place-items-center">
+            <div className="grid h-full place-items-center p-6">
               <Button onClick={() => download(open)}>
                 <Download /> Download {basename(open.name)}
               </Button>

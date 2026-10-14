@@ -6,6 +6,7 @@ import type { ProgressRecord } from "@/lib/db";
 import { cn, formatDuration } from "@/lib/utils";
 import { FileIcon, TYPE_LABEL } from "../file-icon";
 import { Progress } from "../ui/progress";
+import { lessonStatus, sectionStatus, StatusBadge } from "./status";
 
 export const CourseSidebar = forwardRef<
   HTMLInputElement,
@@ -107,7 +108,8 @@ export const CourseSidebar = forwardRef<
                 <div className="min-w-0 flex-1">
                   <p className="text-[11px] font-medium uppercase tracking-wide text-subtle">Section {si + 1}</p>
                   <p className="text-sm font-semibold leading-snug">{s.title}</p>
-                  <p className="mt-0.5 text-xs text-muted">
+                  <p className="mt-1 flex items-center gap-2 text-xs text-muted">
+                    <StatusBadge status={sectionStatus(s.lessons, progress)} />
                     {sDone}/{s.lessons.length} done
                   </p>
                 </div>
@@ -117,6 +119,7 @@ export const CourseSidebar = forwardRef<
                 <ul className="overflow-hidden">
                   {s.lessons.map((l) => {
                     const p = progress.get(l.path);
+                    const status = lessonStatus(p);
                     const active = l.id === currentLessonId;
                     return (
                       <li key={l.id}>
@@ -132,16 +135,18 @@ export const CourseSidebar = forwardRef<
                             aria-label={`${p?.completed ? "Mark incomplete" : "Mark complete"}: ${l.title}`}
                             className={cn(
                               "mt-0.5 grid size-[18px] shrink-0 place-items-center rounded-full border-2 transition-colors",
-                              p?.completed ? "border-success bg-success text-white" : "border-border hover:border-primary",
+                              status === "done" ? "border-success bg-success text-white" : status === "started" ? "border-primary" : "border-border hover:border-primary",
                             )}
                           >
-                            {p?.completed && <Check className="size-3" strokeWidth={3.5} />}
+                            {status === "done" && <Check className="size-3" strokeWidth={3.5} />}
+                            {status === "started" && <span className="size-1.5 rounded-full bg-primary" />}
                           </button>
                           <button onClick={() => onSelect(l.id)} className="min-w-0 flex-1 text-left">
                             <p className={cn("text-sm leading-snug", active ? "font-medium text-foreground" : "text-foreground/90")}>{l.title}</p>
                             <p className="mt-1 flex items-center gap-1.5 text-xs text-muted">
                               <FileIcon type={l.type} className="size-3.5" />
                               {l.path.startsWith("youtube:") ? "YouTube" : TYPE_LABEL[l.type]}
+                              {status === "started" && <StatusBadge status={status} />}
                               {!!l.solution && <span className="rounded bg-warning-soft px-1.5 text-[10px] font-medium text-warning">+ solution</span>}
                               {!!l.attachments?.length && (
                                 <span className="rounded bg-surface-2 px-1.5 text-[10px] font-medium text-muted">

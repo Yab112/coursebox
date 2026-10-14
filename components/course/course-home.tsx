@@ -12,6 +12,7 @@ import { Progress } from "../ui/progress";
 import { CourseHtml } from "../viewers/course-html";
 import { MarkdownBody } from "../viewers/simple-viewers";
 import { FilesTab } from "./files-tab";
+import { lessonStatus, sectionStatus, StatusBadge } from "./status";
 
 export function CourseHome({
   course,
@@ -207,7 +208,8 @@ export function CourseHome({
                           <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-sm font-semibold text-primary">{si + 1}</span>
                           <div className="min-w-0 flex-1">
                             <p className="font-medium">{s.title}</p>
-                            <p className="text-xs text-muted">
+                            <p className="mt-0.5 flex items-center gap-2 text-xs text-muted">
+                              <StatusBadge status={sectionStatus(s.lessons, progress)} />
                               {s.lessons.length} lessons · {sDone} done
                             </p>
                           </div>
@@ -217,7 +219,7 @@ export function CourseHome({
                         </summary>
                         <ul className="pb-2">
                           {s.lessons.map((l) => {
-                            const p = progress.get(l.path);
+                            const status = lessonStatus(progress.get(l.path));
                             return (
                               <li key={l.id}>
                                 <button
@@ -226,7 +228,8 @@ export function CourseHome({
                                 >
                                   <FileIcon type={l.type} className="text-muted" />
                                   <span className="min-w-0 flex-1 truncate">{l.title}</span>
-                                  {p?.completed && <CheckCircle2 className="size-4 shrink-0 text-success" />}
+                                  {status === "started" && <StatusBadge status={status} />}
+                                  {status === "done" && <CheckCircle2 className="size-4 shrink-0 text-success" />}
                                 </button>
                               </li>
                             );

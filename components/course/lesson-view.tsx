@@ -233,7 +233,7 @@ export function LessonView({
       )}
 
       {/* Viewer */}
-      <div className="min-h-0 flex-1 bg-viewer">
+      <div className="min-h-0 flex-1 overflow-hidden bg-viewer">
         <FileViewer
           key={active.path}
           courseId={courseId}

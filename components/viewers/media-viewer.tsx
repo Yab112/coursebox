@@ -86,7 +86,7 @@ export function MediaViewer({
 
   return (
     <div className="flex h-full flex-col">
-      <div className={cn("flex min-h-0 flex-1 items-center justify-center", kind === "video" ? "bg-black" : "bg-viewer p-8")}>
+      <div className={cn("flex min-h-0 flex-1", kind === "video" ? "items-center justify-center bg-black" : "scrollbar-thin overflow-auto bg-viewer p-8")}>
         {kind === "video" ? (
           <video {...props} className="max-h-full w-full">
             {tracks.map((t, i) => (
@@ -94,7 +94,7 @@ export function MediaViewer({
             ))}
           </video>
         ) : (
-          <div className="w-full max-w-xl rounded-2xl border border-border bg-surface p-8 shadow-card">
+          <div className="m-auto w-full max-w-xl shrink-0 rounded-2xl border border-border bg-surface p-8 shadow-card">
             <audio {...props} className="w-full" />
           </div>
         )}

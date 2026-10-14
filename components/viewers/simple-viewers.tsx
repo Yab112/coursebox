@@ -209,8 +209,8 @@ export function ImageViewer({ url, alt }: { url: string; alt: string }) {
 
 export function FallbackViewer({ path, size, onDownload }: { path: string; size?: number; onDownload: () => void }) {
   return (
-    <div className="grid h-full place-items-center bg-viewer p-6">
-      <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8 text-center shadow-card">
+    <div className="scrollbar-thin flex h-full overflow-auto bg-viewer p-6">
+      <div className="m-auto w-full max-w-sm shrink-0 rounded-2xl border border-border bg-surface p-8 text-center shadow-card">
         <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-surface-2 text-muted">
           <FileQuestion className="size-7" />
         </span>
