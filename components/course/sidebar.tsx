@@ -91,9 +91,14 @@ export const CourseSidebar = forwardRef<
 
         {sections.map((s, si) => {
           const isOpen = !!q || !!open[s.id];
+          const prevGroup = sections[si - 1]?.group;
+          const groupHeader = s.group ? (s.group !== prevGroup ? s.group : undefined) : prevGroup ? "More materials" : undefined;
           const sDone = s.lessons.filter((l) => progress.get(l.path)?.completed).length;
           return (
             <div key={s.id} className="border-b border-border">
+              {groupHeader && (
+                <p className="border-b border-border bg-surface px-4 pb-2 pt-4 text-xs font-bold uppercase tracking-wider text-primary">{groupHeader}</p>
+              )}
               <button
                 onClick={() => setOpen((o) => ({ ...o, [s.id]: !isOpen }))}
                 className="flex w-full items-start gap-3 bg-surface-2/60 px-4 py-3 text-left hover:bg-surface-2"
@@ -124,7 +129,7 @@ export const CourseSidebar = forwardRef<
                         >
                           <button
                             onClick={() => onToggleComplete(l.path, !p?.completed)}
-                            aria-label={p?.completed ? "Mark incomplete" : "Mark complete"}
+                            aria-label={`${p?.completed ? "Mark incomplete" : "Mark complete"}: ${l.title}`}
                             className={cn(
                               "mt-0.5 grid size-[18px] shrink-0 place-items-center rounded-full border-2 transition-colors",
                               p?.completed ? "border-success bg-success text-white" : "border-border hover:border-primary",
@@ -137,7 +142,12 @@ export const CourseSidebar = forwardRef<
                             <p className="mt-1 flex items-center gap-1.5 text-xs text-muted">
                               <FileIcon type={l.type} className="size-3.5" />
                               {l.path.startsWith("youtube:") ? "YouTube" : TYPE_LABEL[l.type]}
-                              {!!l.meta?.solution && <span className="rounded bg-warning-soft px-1.5 text-[10px] font-medium text-warning">+ solution</span>}
+                              {!!l.solution && <span className="rounded bg-warning-soft px-1.5 text-[10px] font-medium text-warning">+ solution</span>}
+                              {!!l.attachments?.length && (
+                                <span className="rounded bg-surface-2 px-1.5 text-[10px] font-medium text-muted">
+                                  +{l.attachments.length} resource{l.attachments.length > 1 ? "s" : ""}
+                                </span>
+                              )}
                               {!!p?.seconds && p.seconds >= 60 && <span className="text-subtle">· {formatDuration(p.seconds)}</span>}
                             </p>
                           </button>

@@ -1,0 +1,27 @@
+name: Course structure not recognized
+description: A course zip is organized badly (wrong sections, missing files, bad titles)
+labels: ["analyzer"]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Where is the course from?
+      placeholder: MIT OCW 18.01SC / Udemy download / my own folder…
+    validations:
+      required: true
+  - type: textarea
+    id: analyze
+    attributes:
+      label: Output of `npm run analyze -- <course.zip>`
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: listing
+    attributes:
+      label: File listing (`unzip -l course.zip | head -200`)
+      render: text
+  - type: textarea
+    id: expected
+    attributes:
+      label: How should it be organized?

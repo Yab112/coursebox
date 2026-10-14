@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "postinstall": "node scripts/copy-pdf-worker.mjs"
+    "postinstall": "node scripts/copy-pdf-worker.mjs",
+    "analyze": "tsx scripts/analyze.mts",
+    "test:e2e": "playwright test",
+    "test:all": "npm test && next build && playwright test",
+    "predev": "node scripts/copy-pdf-worker.mjs",
+    "prebuild": "node scripts/copy-pdf-worker.mjs"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.2.1",
@@ -33,6 +38,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^24.19.2",
@@ -41,7 +47,10 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.27",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.0.4"
-  }
+  },
+  "license": "MIT",
+  "description": "Turn downloaded course zips (MIT OpenCourseWare, Udemy-style folders, anything) into a personal Coursera/Udemy-style learning space. Local-first."
 }

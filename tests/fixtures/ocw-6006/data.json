@@ -1,0 +1,119 @@
+{
+ "course_description": "This course is an introduction to mathematical modeling of computational problems, as well as common algorithms, algorithmic paradigms, and data structures used to solve these problems. It emphasizes the relationship between algorithms and programming and introduces basic performance measures and analysis techniques for these problems.\n",
+ "course_description_html": "This course is an introduction to mathematical modeling of computational problems, as well as common algorithms, algorithmic paradigms, and data structures used to solve these problems. It emphasizes the relationship between algorithms and programming and introduces basic performance measures and analysis techniques for these problems.",
+ "course_image": {
+  "content": "5a62336c-0a97-b276-d614-1b0b7f070b5b",
+  "website": "6-006-introduction-to-algorithms-spring-2020"
+ },
+ "course_image_metadata": {
+  "content_type": "resource",
+  "description": "",
+  "draft": false,
+  "file": "/courses/6-006-introduction-to-algorithms-spring-2020/5a62336c0a97b276d6141b0b7f070b5b_6-006s20.png",
+  "file_size": 198160,
+  "file_type": "image/png",
+  "image_metadata": {
+   "caption": "In the last lecture, Prof. Demaine demonstrates how he uses algorithms to create intricate origami figures. (Image courtesy of the instructors.)",
+   "credit": "",
+   "image-alt": "Prof. Demaine holds up a swirling origami figure."
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWImage",
+  "resourcetype": "Image",
+  "title": "6-006s20.png",
+  "uid": "5a62336c-0a97-b276-d614-1b0b7f070b5b"
+ },
+ "course_image_thumbnail": {
+  "content": "89d89284-fa01-5e96-2118-dd6201006c98",
+  "website": "6-006-introduction-to-algorithms-spring-2020"
+ },
+ "course_title": "Introduction to Algorithms",
+ "department_numbers": [
+  "6"
+ ],
+ "extra_course_numbers": "",
+ "image_src": "./static_resources/5a62336c0a97b276d6141b0b7f070b5b_6-006s20.png",
+ "instructors": [
+  {
+   "first_name": "Erik",
+   "last_name": "Demaine",
+   "middle_initial": "",
+   "salutation": "Prof.",
+   "title": "Prof. Erik Demaine",
+   "uid": "adc586d4-a306-ce04-7a4f-c2ebe1bf1197",
+   "url": "https://ocw.mit.edu/search/?q=Prof.+Erik+Demaine"
+  },
+  {
+   "first_name": "Jason",
+   "last_name": "Ku",
+   "middle_initial": "",
+   "salutation": "Dr.",
+   "title": "Dr. Jason Ku",
+   "uid": "e4387fd8-ea9f-09c4-4d12-78024f30db06",
+   "url": "https://ocw.mit.edu/search/?q=Dr.+Jason+Ku"
+  },
+  {
+   "first_name": "Justin",
+   "last_name": "Solomon",
+   "middle_initial": "",
+   "salutation": "Prof.",
+   "title": "Prof. Justin Solomon",
+   "uid": "add0aeaa-24e8-4e00-4bc1-495f885cd5eb",
+   "url": "https://ocw.mit.edu/search/?q=Prof.+Justin+Solomon"
+  }
+ ],
+ "learning_resource_types": [
+  "Lecture Videos",
+  "Lecture Notes",
+  "Problem Sets",
+  "Problem Set Solutions",
+  "Exams",
+  "Exam Solutions"
+ ],
+ "legacy_uid": "08bc3f3a-9a39-a3e3-f6cd-7fcfb9d8eda8",
+ "level": [
+  "Undergraduate"
+ ],
+ "mit_learn_topics": [
+  [
+   "Data Science, Analytics & Computer Technology",
+   "Algorithms and Data Structures"
+  ],
+  [
+   "Data Science, Analytics & Computer Technology",
+   "Computer Science"
+  ],
+  [
+   "Engineering"
+  ],
+  [
+   "Science & Math",
+   "Mathematics"
+  ]
+ ],
+ "primary_course_number": "6.006",
+ "site_short_id": "6.006-spring-2020",
+ "site_uid": "569bea40-0b9e-4cde-8c34-497bab16606d",
+ "site_url_path": "courses/6-006-introduction-to-algorithms-spring-2020",
+ "term": "Spring",
+ "title": "Course Metadata",
+ "topics": [
+  [
+   "Engineering",
+   "Computer Science",
+   "Algorithms and Data Structures"
+  ],
+  [
+   "Engineering",
+   "Computer Science",
+   "Theory of Computation"
+  ],
+  [
+   "Mathematics",
+   "Computation"
+  ]
+ ],
+ "year": "2020"
+}

@@ -1,0 +1,29 @@
+{
+ "body": "",
+ "content": "<p>Five example programs are worked. Topics include Dijkstra algorithm, weighted graph radius, weighted ratios, and Johnson&rsquo;s algorithm.</p>\n<p><strong>Instructor:</strong> Justin Solomon</p>\n",
+ "content_type": "resource",
+ "draft": false,
+ "file": "/courses/6-006-introduction-to-algorithms-spring-2020/mit6_006s20_04_07_problem_session_7_360p_16_9.mp4",
+ "file_size": 194232057,
+ "file_type": "video/mp4",
+ "iscjklanguage": false,
+ "learning_resource_types": [
+  "Recitation Videos"
+ ],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "resourcetype": "Video",
+ "title": "Problem Session 7",
+ "uid": "ec057378-a193-4baf-9072-777f0dc321bc",
+ "video_files": {
+  "archive_url": "",
+  "video_captions_file": "/courses/6-006-introduction-to-algorithms-spring-2020/mit6_006s20_04_07_problem_session_7_captions.vtt",
+  "video_thumbnail_file": "https://img.youtube.com/vi/Md9QOXomxFs/default.jpg",
+  "video_transcript_file": "/courses/6-006-introduction-to-algorithms-spring-2020/mit6_006s20_04_07_problem_session_7_transcript.pdf"
+ },
+ "video_metadata": {
+  "video_speakers": "",
+  "video_tags": "Dijkstra, weighted graph radius, edge weight, graph construction, hash table, priority queue",
+  "youtube_description": "MIT 6.006 Introduction to Algorithms, Spring 2020\nInstructor: Justin Solomon\nView the complete course: https://ocw.mit.edu/6-006S20\nYouTube Playlist: https://www.youtube.com/playlist?list=PLUl4u3cNGP63EdVPNLG3ToM6LaEUuStEY\n\nFive example programs are worked. Topics include Dijkstra algorithm, weighted graph radius, weighted ratios, and Johnson's algorithm.\n\nLicense: Creative Commons BY-NC-SA\nMore information at https://ocw.mit.edu/terms\nMore courses at https://ocw.mit.edu\nSupport OCW at http://ow.ly/a1If50zVRlQ\n\nWe encourage constructive comments and discussion on OCW’s YouTube and other social media channels. Personal attacks, hate speech, trolling, and inappropriate comments are not allowed and may be removed. More details at https://ocw.mit.edu/comments.",
+  "youtube_id": "Md9QOXomxFs"
+ }
+}

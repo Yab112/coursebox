@@ -11,6 +11,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { ProgressRing } from "@/components/ui/progress";
 import { downloadFile, flattenLessons, reanalyzeCourse } from "@/lib/course";
+import { MANIFEST_VERSION } from "@/lib/analyzers/types";
 import { addStudyTime, db, updateProgress, type ProgressRecord } from "@/lib/db";
 import { cn } from "@/lib/utils";
 
@@ -72,6 +73,14 @@ function CoursePlayer() {
     [lessons, go, id],
   );
 
+  // Courses imported with an older analyzer are re-analyzed once (progress is keyed by path, so it survives).
+  const upgraded = useRef(false);
+  useEffect(() => {
+    if (!course || upgraded.current || (course.manifest.version ?? 1) >= MANIFEST_VERSION) return;
+    upgraded.current = true;
+    reanalyzeCourse(id).catch(() => {});
+  }, [course, id]);
+
   // Remember the last opened lesson.
   useEffect(() => {
     if (!lesson) return;
@@ -127,7 +136,6 @@ function CoursePlayer() {
 
   const done = lessons.filter((l) => progress.get(l.path)?.completed).length;
   const pct = lessons.length ? (done / lessons.length) * 100 : 0;
-  const solutionPath = (lesson?.meta?.solution as { path?: string } | undefined)?.path;
 
   return (
     <div className="flex h-dvh flex-col">
@@ -182,7 +190,7 @@ function CoursePlayer() {
               courseId={id}
               lesson={lesson}
               progress={progress.get(lesson.path)}
-              solutionProgress={solutionPath ? progress.get(solutionPath) : undefined}
+              progressFor={(p) => progress.get(p)}
               prev={lessons[idx - 1]}
               next={lessons[idx + 1]}
               onNavigate={go}

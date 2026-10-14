@@ -1,0 +1,118 @@
+{
+ "course_description": "_6.0001 Introduction to Computer Science and Programming in Python_ is intended for students with little or no programming experience. It aims to provide students with an understanding of the role computation can play in solving problems and to help students, regardless of their major, feel justifiably confident of their ability to write small programs that allow them to accomplish useful goals. The class uses the Python 3.5 programming language.\n",
+ "course_description_html": "<em>6.0001 Introduction to Computer Science and Programming in Python</em> is intended for students with little or no programming experience. It aims to provide students with an understanding of the role computation can play in solving problems and to help students, regardless of their major, feel justifiably confident of their ability to write small programs that allow them to accomplish useful goals. The class uses the Python 3.5 programming language.",
+ "course_image": {
+  "content": "bb7bc760-922a-bfcd-37f5-d8b9203d771f",
+  "website": "6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016"
+ },
+ "course_image_metadata": {
+  "content_type": "resource",
+  "description": "6.0001 is intended to teach basic programming concepts to students with no prior coding experience. Dboybaker, licesned CC-BY-NC-SA",
+  "draft": false,
+  "file": "/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/bb7bc760922abfcd37f5d8b9203d771f_6-0001f16.jpg",
+  "file_size": 65522,
+  "file_type": "image/jpeg",
+  "image_metadata": {
+   "caption": "6.0001 is intended to teach basic programming concepts to students with no prior coding experience. ({{% resource_link \"960c5e76-00db-4cc8-b37c-14bef08a3867\" \"Dboybaker\" %}}, licensed CC-BY-NC-SA)",
+   "credit": "Dboybaker, licesned CC-BY-NC-SA",
+   "image-alt": "A black backlit keyboard."
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWImage",
+  "resourcetype": "Image",
+  "title": "6-0001f16.jpg",
+  "uid": "bb7bc760-922a-bfcd-37f5-d8b9203d771f"
+ },
+ "course_image_thumbnail": {
+  "content": "10cee5c2-3c90-3427-1800-f886a7ec68db",
+  "website": "6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016"
+ },
+ "course_title": "Introduction to Computer Science and Programming in Python",
+ "department_numbers": [
+  "6"
+ ],
+ "extra_course_numbers": "",
+ "hide_download": false,
+ "image_src": "./static_resources/bb7bc760922abfcd37f5d8b9203d771f_6-0001f16.jpg",
+ "instructors": [
+  {
+   "first_name": "Ana",
+   "last_name": "Bell",
+   "middle_initial": "",
+   "salutation": "Dr.",
+   "title": "Dr. Ana Bell",
+   "uid": "5c0454cf-72a0-46d9-66ca-fa2edb801005",
+   "url": "https://ocw.mit.edu/search/?q=Dr.+Ana+Bell"
+  },
+  {
+   "first_name": "Eric",
+   "last_name": "Grimson",
+   "middle_initial": "",
+   "salutation": "Prof.",
+   "title": "Prof. Eric Grimson",
+   "uid": "c010ab86-ace6-3792-07c9-ce6c8e62e38f",
+   "url": "https://ocw.mit.edu/search/?q=Prof.+Eric+Grimson"
+  },
+  {
+   "first_name": "John",
+   "last_name": "Guttag",
+   "middle_initial": "",
+   "salutation": "Prof.",
+   "title": "Prof. John Guttag",
+   "uid": "0fb19bce-9520-8355-d51a-1d5087eb5391",
+   "url": "https://ocw.mit.edu/search/?q=Prof.+John+Guttag"
+  }
+ ],
+ "learning_resource_types": [
+  "Problem Sets",
+  "Lecture Notes",
+  "Lecture Videos",
+  "Programming Assignments with Examples"
+ ],
+ "legacy_uid": "9833b95b-8cbb-8e0e-7928-063857ea2761",
+ "level": [
+  "Undergraduate"
+ ],
+ "mit_learn_topics": [
+  [
+   "Data Science, Analytics & Computer Technology",
+   "Algorithms and Data Structures"
+  ],
+  [
+   "Data Science, Analytics & Computer Technology",
+   "Computer Science"
+  ],
+  [
+   "Engineering"
+  ],
+  [
+   "Data Science, Analytics & Computer Technology",
+   "Programming & Coding"
+  ]
+ ],
+ "primary_course_number": "6.0001",
+ "site_short_id": "6.0001-fall-2016",
+ "site_uid": "71ad7cf6-d1bb-4cee-aa16-c5a86a3393c8",
+ "site_url_path": "courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016",
+ "term": "Fall",
+ "title": "Course Metadata",
+ "topics": [
+  [
+   "Engineering",
+   "Computer Science"
+  ],
+  [
+   "Engineering",
+   "Computer Science",
+   "Algorithms and Data Structures"
+  ],
+  [
+   "Engineering",
+   "Computer Science",
+   "Programming Languages"
+  ]
+ ],
+ "year": "2016"
+}

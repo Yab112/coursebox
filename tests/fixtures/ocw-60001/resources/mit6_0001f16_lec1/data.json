@@ -1,0 +1,33 @@
+{
+ "content": "<p>This file contains information regarding lecture 1 notes.</p>\n",
+ "content_type": "resource",
+ "description": "This file contains information regarding lecture 1 notes.",
+ "draft": false,
+ "file": "/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/e921a690079369751bcce3e34da6c6ee_MIT6_0001F16_Lec1.pdf",
+ "file_size": 823569,
+ "file_type": "application/pdf",
+ "iscjklanguage": false,
+ "learning_resource_types": [
+  "Lecture Notes"
+ ],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "OCWFile",
+ "parent_title": "Lecture Slides and Code",
+ "parent_type": "CourseSection",
+ "parent_uid": "f39a25a3-5f6b-0d3e-6388-e9b2e8b7438e",
+ "resourcetype": "Document",
+ "title": "Lecture 1: Welcome",
+ "uid": "e921a690-0793-6975-1bcc-e3e34da6c6ee",
+ "video_files": {
+  "archive_url": "",
+  "video_captions_file": "",
+  "video_thumbnail_file": "",
+  "video_transcript_file": ""
+ },
+ "video_metadata": {
+  "video_speakers": "",
+  "video_tags": "",
+  "youtube_description": "",
+  "youtube_id": ""
+ }
+}

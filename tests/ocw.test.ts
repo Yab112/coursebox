@@ -51,8 +51,8 @@ describe("MIT OCW analyzer", async () => {
   it("pairs assignments with solutions and skips cover/thumbnail images", () => {
     const a = manifest.sections[1].lessons;
     expect(a.map((l) => l.title)).toEqual(["Assignment 1", "Assignment 2"]);
-    expect(a[0].meta?.solution).toMatchObject({ path: "static_resources/d61d6c8e64ed20efff3e6ca4fc88742b_MIT18_657F15_PS1_Sol.pdf" });
-    expect(a[1].meta?.solution).toBeUndefined();
+    expect(a[0].solution).toMatchObject({ path: "static_resources/d61d6c8e64ed20efff3e6ca4fc88742b_MIT18_657F15_PS1_Sol.pdf" });
+    expect(a[1].solution).toBeUndefined();
     const all = manifest.sections.flatMap((s) => s.lessons.map((l) => l.path));
     expect(all.some((p) => p.endsWith(".jpg"))).toBe(false);
   });

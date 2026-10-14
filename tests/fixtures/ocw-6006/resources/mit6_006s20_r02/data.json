@@ -1,0 +1,34 @@
+{
+ "content": "",
+ "content_type": "resource",
+ "description": "",
+ "draft": false,
+ "file": "/courses/6-006-introduction-to-algorithms-spring-2020/c08a3b63dfe5f6f6b32257d35f86ae63_MIT6_006S20_r02.pdf",
+ "file_size": 257188,
+ "file_type": "application/pdf",
+ "iscjklanguage": false,
+ "learning_resource_types": [
+  "Problem-solving Notes"
+ ],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "OCWFile",
+ "parent_title": "Lecture Notes",
+ "parent_type": "CourseSection",
+ "parent_uid": "51ba9637-0a92-32f2-88ab-0bef851c9ad4",
+ "resourcetype": "Document",
+ "title": "Recitation 2",
+ "uid": "c08a3b63-dfe5-f6f6-b322-57d35f86ae63",
+ "video_files": {
+  "archive_url": "",
+  "video_captions_file": "",
+  "video_thumbnail_file": "",
+  "video_transcript_file": ""
+ },
+ "video_metadata": {
+  "source": "",
+  "video_speakers": "",
+  "video_tags": "",
+  "youtube_description": "",
+  "youtube_id": ""
+ }
+}

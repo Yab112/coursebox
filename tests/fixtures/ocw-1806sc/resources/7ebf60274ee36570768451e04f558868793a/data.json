@@ -1,0 +1,36 @@
+{
+ "content": "",
+ "content_type": "resource",
+ "description": "",
+ "draft": false,
+ "end_time": "",
+ "file": null,
+ "file_size": "36058760",
+ "file_type": "",
+ "iscjklanguage": false,
+ "learning_resource_types": [
+  "Problem-solving Videos"
+ ],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "",
+ "optional_tab_title": "",
+ "optional_text": "",
+ "parent_title": "The Geometry of Linear Equations",
+ "parent_type": "CourseSection",
+ "related_resources_text": "",
+ "resource_index_text": "",
+ "resourcetype": "Video",
+ "start_time": "",
+ "title": "线性代数的几何表示",
+ "uid": "a582f123-a7db-2706-8432-ac7650a99839",
+ "video_files": {
+  "archive_url": "http://www.archive.org/download/MIT18.06SCF11-zh/MIT18_06SC_110609_L3_zh-hans-cmn_300k.mp4",
+  "video_captions_file": null,
+  "video_thumbnail_file": "https://img.youtube.com/vi/mgbjhzDndOY/default.jpg",
+  "video_transcript_file": null
+ },
+ "video_metadata": {
+  "video_tags": "18-06sc-linear-algebra-fall-2011, 线性代数，几何",
+  "youtube_id": "mgbjhzDndOY"
+ }
+}

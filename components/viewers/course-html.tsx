@@ -27,6 +27,7 @@ export function CourseHtml({
   onLesson,
   onPath,
   className,
+  interactive,
 }: {
   html: string;
   courseId: string;
@@ -34,16 +35,18 @@ export function CourseHtml({
   onLesson?: (lessonId: string) => void;
   onPath?: (path: string) => boolean;
   className?: string;
+  /** Keep radio/checkbox inputs (OCW in-class multiple-choice questions). */
+  interactive?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const clean = useMemo(
     () =>
-      DOMPurify.sanitize(html, {
-        FORBID_TAGS: ["style", "script", "iframe", "form", "input", "button"],
+      DOMPurify.sanitize(html.replace(/\{\{[%<][\s\S]*?[%>]\}\}/g, ""), {
+        FORBID_TAGS: ["style", "script", "iframe", "form", "button", "svg", ...(interactive ? [] : ["input"])],
         FORBID_ATTR: ["style"],
         ADD_ATTR: ["target"],
       }),
-    [html],
+    [html, interactive],
   );
 
   useEffect(() => {
@@ -56,6 +59,18 @@ export function CourseHtml({
         a.setAttribute("target", "_blank");
         a.setAttribute("rel", "noopener noreferrer");
       }
+    });
+    root.querySelectorAll("input").forEach((i) => {
+      if (!/^(radio|checkbox)$/i.test(i.type)) i.remove();
+    });
+    root.querySelectorAll(".multiple-choice-solution").forEach((sol) => {
+      if (sol.closest("details")) return;
+      const d = document.createElement("details");
+      d.className = "mc-solution";
+      const sum = document.createElement("summary");
+      sum.textContent = "Show solution";
+      sol.replaceWith(d);
+      d.append(sum, sol);
     });
     root.querySelectorAll<HTMLImageElement>("img").forEach(async (img) => {
       const rel = img.getAttribute("data-course-src") ?? img.getAttribute("src");

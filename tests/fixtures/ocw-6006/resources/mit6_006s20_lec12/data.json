@@ -1,0 +1,33 @@
+{
+ "content": "",
+ "content_type": "resource",
+ "description": "",
+ "draft": false,
+ "file": "/courses/6-006-introduction-to-algorithms-spring-2020/2430d7903a5529451d80c17f89a41fe8_MIT6_006S20_lec12.pdf",
+ "file_size": 262512,
+ "file_type": "application/pdf",
+ "iscjklanguage": false,
+ "learning_resource_types": [
+  "Lecture Notes"
+ ],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "OCWFile",
+ "parent_title": "Lecture Notes",
+ "parent_type": "CourseSection",
+ "parent_uid": "51ba9637-0a92-32f2-88ab-0bef851c9ad4",
+ "resourcetype": "Document",
+ "title": "Lecture 12: Bellman-Ford",
+ "uid": "2430d790-3a55-2945-1d80-c17f89a41fe8",
+ "video_files": {
+  "archive_url": "",
+  "video_captions_file": "",
+  "video_thumbnail_file": "",
+  "video_transcript_file": ""
+ },
+ "video_metadata": {
+  "video_speakers": "",
+  "video_tags": "",
+  "youtube_description": "",
+  "youtube_id": ""
+ }
+}

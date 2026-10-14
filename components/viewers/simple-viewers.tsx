@@ -57,6 +57,23 @@ function CourseImage({ courseId, baseDir, src, alt }: { courseId: string; baseDi
   return <img src={external ? src : (url ?? undefined)} alt={alt ?? ""} className="rounded-lg" />;
 }
 
+/** Markdown without its own scroll container (course overview README). */
+export function MarkdownBody({ courseId, path }: { courseId: string; path: string }) {
+  const { text } = useFileText(courseId, path);
+  if (text === undefined) return <div className="skeleton h-40 rounded-xl" />;
+  const baseDir = dirname(path);
+  return (
+    <div className="prose prose-zinc max-w-none dark:prose-invert prose-a:text-primary prose-headings:tracking-tight prose-code:before:content-none prose-code:after:content-none">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{ img: ({ src, alt }) => <CourseImage courseId={courseId} baseDir={baseDir} src={typeof src === "string" ? src : undefined} alt={alt} /> }}
+      >
+        {text ?? ""}
+      </ReactMarkdown>
+    </div>
+  );
+}
+
 export function MarkdownViewer({ courseId, path, onPath }: { courseId: string; path: string; onPath?: (p: string) => boolean }) {
   const { text } = useFileText(courseId, path);
   if (text === undefined) return <Loading />;

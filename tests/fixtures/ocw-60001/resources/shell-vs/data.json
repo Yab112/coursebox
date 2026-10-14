@@ -1,0 +1,48 @@
+{
+ "audience": [],
+ "content": "<p><strong>Description:</strong> This in-class question explains the difference between the IDLE python environment and the shell.</p>\n<p><strong>Instructor:</strong> Dr. Ana Bell</p>\n",
+ "content_type": "resource",
+ "description": "",
+ "draft": false,
+ "end_time": "",
+ "file": null,
+ "file_size": "5266736",
+ "file_type": "",
+ "iscjklanguage": false,
+ "learning_resource_types": [
+  "Videos"
+ ],
+ "level": [],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "",
+ "optional_tab_title": "",
+ "optional_text": "",
+ "parent_title": "Lecture 1",
+ "parent_type": "CourseSection",
+ "related_resources_text": "",
+ "resource_index_text": "",
+ "resourcetype": "Video",
+ "start_time": "",
+ "title": "Shell vs. Editor",
+ "uid": "9fa9dd0c-078c-0527-cd9d-278c902a9570",
+ "video_files": {
+  "archive_url": "https://archive.org/download/MIT6.0001F16/MIT6_0001F16_Lecture_01_exercise_01_300k.mp4",
+  "video_captions_resources": [
+   {
+    "file": "/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/b30194ef3f425498849657089e561bd3_Y6J8I056Ffw.vtt",
+    "language": "en"
+   }
+  ],
+  "video_thumbnail_file": "https://img.youtube.com/vi/Y6J8I056Ffw/default.jpg",
+  "video_transcript_resources": [
+   {
+    "file": "/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/4b42a90262becb77fd1c2a3cc3cb6599_Y6J8I056Ffw.pdf",
+    "language": "en"
+   }
+  ]
+ },
+ "video_metadata": {
+  "video_tags": "6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016, bash, idle, python, shell",
+  "youtube_id": "Y6J8I056Ffw"
+ }
+}

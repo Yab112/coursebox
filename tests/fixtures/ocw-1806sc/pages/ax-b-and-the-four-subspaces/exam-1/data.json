@@ -1,0 +1,18 @@
+{
+ "content": "<p>« <a href=\"../../../pages/ax-b-and-the-four-subspaces/exam-1-review/index.html\">Previous</a> | <a href=\"../../../pages/least-squares-determinants-and-eigenvalues/index.html\">Next</a> »</p>\n\n    <h3 id=\"session-overview\">Session Overview</h3>\n\n<p><table>\n\n<tr>\n\n<td>\n\n<img src=\"../../../static_resources/9453ea0a94bc7c74ec1fd1b5a1735673_Exam_1.jpg\" alt=\"\" loading=\"lazy\" decoding=\"async\" />\n</td>\n\n<td>\n</p>\n<p>For this exam, you will need to know the results from elimination and the process of elimination using the simple matrices E — with one nonzero off the diagonal.</p>\n</td>\n\n</tr>\n\n</table>\n\n\n    <h3 id=\"check-yourself\">Check Yourself</h3>\n\n\n    <h4 id=\"exams-and-solutions\">Exams and Solutions</h4>\n\n<ul>\n<li><a href=\"../../../resources/mit18_06scf11_ex1/index.html\">Exams (PDF)</a></li>\n<li><a href=\"../../../resources/mit18_06scf11_ex1s/index.html\">Solutions (PDF)</a></li>\n</ul>\n<p>« <a href=\"../../../pages/ax-b-and-the-four-subspaces/exam-1-review/index.html\">Previous</a> | <a href=\"../../../pages/least-squares-determinants-and-eigenvalues/index.html\">Next</a> »</p>\n",
+ "content_type": "page",
+ "description": "",
+ "draft": false,
+ "iscjklanguage": false,
+ "learning_resource_types": [],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "CourseSection",
+ "parent_title": "Unit I: Ax = b and the Four Subspaces",
+ "parent_type": "CourseSection",
+ "parent_uid": "34303ce1-9b45-7241-22d2-bd33d64df688",
+ "title": "Exam 1",
+ "uid": "f5c6f676-32a0-d7e7-bcdf-bc97569b662f",
+ "video_metadata": {
+  "youtube_id": null
+ }
+}

@@ -1,51 +1,85 @@
 # CourseBox
 
-A personal course reader for downloaded course zips. Drop in a `.zip` (for example an MIT OpenCourseWare download, or a folder of videos, PDFs and notes) and it becomes a Udemy/Coursera-style course: a header, a sidebar of sections and lessons, a viewer, and progress tracking.
+**Turn a downloaded course zip into your own Coursera/Udemy-style learning space.**
+Drop in an MIT OpenCourseWare export, a Udemy-style download or any folder of videos, PDFs and notes.
+CourseBox works out the structure (units, sessions, lectures, problem sets with solutions) and gives you a
+clean course player with progress tracking. Everything stays in your browser.
 
-Phase 1 is local-first. Everything (files, progress, study time) lives in your browser's IndexedDB. There is no backend and no account.
+![Lecture video with its notes attached](docs/screenshots/lecture-with-notes.png)
 
-## Run it
+## Features
+
+- **Drag and drop a zip.** It's unzipped in a Web Worker and stored in IndexedDB. No server, no account.
+- **Smart structure detection:**
+  - **MIT OCW:** units → sessions (18.06SC style), lecture videos with their notes attached, captions
+    and transcripts linked to videos, problem sets and exams paired with locked solutions and starter
+    templates, in-class multiple-choice questions you can answer, and syllabus/calendar as tabs.
+  - **Any folder:** numbered sections and lessons, Udemy `1.1 resource` files, one-folder-per-lesson
+    layouts, subtitles as captions, README as the course overview, and website/tooling junk ignored.
+  - **Nothing is lost:** files no rule recognizes land in *Additional Materials*, and the
+    **All files** tab shows where every file went.
+- **Viewers:** PDF (page nav, zoom, resumes where you left off), video/audio (speed, captions, resume),
+  YouTube with an MP4 fallback, Markdown, sanitized HTML, code, Jupyter notebooks, images, and zips
+  you can browse inside the app.
+- **Learning flow:** sidebar with progress, "Continue where you left off", mark complete,
+  study time (counted only while the tab is visible), `j`/`k`/`m`/`/` shortcuts, dark mode, mobile drawer.
+- **Re-analyze** a course or **re-import a newer version** without losing progress.
+
+| Units and sessions (MIT 18.06SC) | In-class questions (MIT 6.0001) |
+| --- | --- |
+| ![](docs/screenshots/units-sessions.png) | ![](docs/screenshots/in-class-questions.png) |
+| **Every file accounted for** | **Library** |
+| ![](docs/screenshots/all-files.png) | ![](docs/screenshots/library-dark.png) |
+
+## Quick start
 
 ```bash
-npm install        # also copies the pdf.js worker, wasm decoders, cmaps and fonts into public/
-npm run dev        # http://localhost:3000
-npm test           # Vitest unit tests for the structure analyzers
-npm run build && npm start
+git clone https://github.com/<you>/coursebox && cd coursebox
+npm install
+npm run dev     # open http://localhost:3000 and drop a course zip
 ```
 
-Requires Node 20+.
+Requires Node 20+. To get an MIT course, open it on [ocw.mit.edu](https://ocw.mit.edu) and choose
+**Download course**.
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` / `npm run build && npm start` | Run the app |
+| `npm test` | Unit tests for the analyzers (Vitest, real OCW metadata fixtures) |
+| `npm run test:e2e` | End-to-end tests (Playwright). Add `PW_CHANNEL=chrome` to use an installed Chrome |
+| `npm run analyze -- course.zip` | Print the structure CourseBox detects for a zip or folder |
 
 ## How it works
 
-1. **Import** (`hooks/use-importer.ts`, `lib/import.worker.ts`). A Web Worker unzips the archive with JSZip, strips a single wrapping folder, runs the analyzers to preview the course, then writes each file blob to IndexedDB in batches. If a course with the same `sourceKey` already exists, you can update it (progress is kept) or add a copy.
-2. **Structure analyzers** (`lib/analyzers/`). A list of adapters. The first whose `detect()` returns true produces a `CourseManifest`.
-   - `ocw.ts`: MIT OCW new-style export (root `data.json` with `course_title`). It groups `resources/*/data.json` by `parent_title`, natural-sorts them, renames lectures with topics from `pages/lecture-notes` (for example "L2 · Binary Classification"), pairs assignments with their solutions (shown behind a "Reveal solution" step), turns `pages/*` into header tabs, and supports YouTube or archive videos with captions and transcripts.
-   - `generic.ts`: fallback. Folders become sections and files become lessons. It strips "01 - " prefixes and uses them for ordering, flattens nested folders into "Folder / Subfolder", groups root-only files by type, attaches `.srt`/`.vtt` files next to videos as captions, and picks up `cover.jpg`/`thumbnail.png`.
-3. **Storage** (`lib/db.ts`, Dexie). Tables are `courses`, `files` (`[courseId+path]`), `progress` (`[courseId+path]`), `state` (last lesson) and `activity` (seconds per day). Progress is keyed by file **path**, so "Re-analyze structure" and course updates keep it.
-4. **Viewers** (`components/viewers/`). PDF (react-pdf, lazy pages, page nav, zoom, resumes the last page), video and audio (resume, speed, captions), YouTube, image, Markdown, sanitized HTML (DOMPurify, with in-course links and images resolved), text/code with line numbers, Jupyter notebooks, and a download fallback for everything else.
+```
+zip ──► Web Worker (JSZip) ──► IndexedDB files ──► analyzers ──► CourseManifest ──► course player
+                                                     │
+                       ocw.ts → generic.ts → coverage safety net (Additional Materials)
+```
 
-## Keyboard shortcuts
+- `lib/analyzers/`: pluggable adapters. The first whose `detect()` matches builds a `CourseManifest`
+  (sections → lessons, with attachments and solutions).
+- `lib/db.ts`: Dexie tables for courses, files, progress, last-opened state and daily study time.
+  Progress is keyed by file **path**, so re-analysis and updates keep it.
+- `components/viewers/`: one viewer per file type.
 
-| Key | Action |
-| --- | --- |
-| `j` / `k` | next / previous lesson |
-| `m` | toggle lesson complete |
-| `/` | search lessons |
-| `Esc` | close the mobile drawer |
-
-## Adding an analyzer
-
-Create `lib/analyzers/<name>.ts` that implements `Analyzer` (`detect` and `analyze`), then add it to the list in `lib/analyzers/index.ts` before `genericAnalyzer`. Lesson ids come from `stableId(path)`, so they stay stable across re-analysis.
-
-## Environment variables
-
-None are needed for Phase 1. `.env.example` lists the ones Phase 2 (Supabase / R2 sync) will use.
+See [CONTRIBUTING.md](CONTRIBUTING.md) to teach CourseBox a new course layout.
 
 ## Deploy
 
-Push to GitHub and import the repo in Vercel (framework: Next.js, default settings), or run `npx vercel` from this folder. Data stays in each browser, so a deployed copy is still private to whoever uses it.
+It's a standard Next.js app: import the repo on Vercel (or run `npx vercel`). Courses live in each
+visitor's own browser, so a deployed copy is still private to whoever uses it.
 
-## Limits (Phase 1)
+## Roadmap
 
-- JSZip reads the whole archive into the worker's memory. Very large zips (several GB) may need a streaming unzipper.
-- Data is per browser. Clearing site data removes your courses. The app asks the browser for persistent storage on the first import.
+- Cloud sync across devices (Supabase / Cloudflare R2), optional
+- Notes and highlights pinned to PDF pages, with markdown export
+- Study heatmap, streaks and weekly goals
+- "Ask about this lesson" with an LLM
+
+## License
+
+MIT for the code. The test fixtures contain MIT OpenCourseWare metadata under CC BY-NC-SA 4.0
+(see [tests/fixtures/NOTICE.md](tests/fixtures/NOTICE.md)). CourseBox is not affiliated with MIT.

@@ -10,6 +10,8 @@ import { CourseCover } from "../library/course-card";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { CourseHtml } from "../viewers/course-html";
+import { MarkdownBody } from "../viewers/simple-viewers";
+import { FilesTab } from "./files-tab";
 
 export function CourseHome({
   course,
@@ -27,7 +29,8 @@ export function CourseHome({
   onReanalyze: () => Promise<string>;
 }) {
   const m = course.manifest;
-  const tabs = ["Overview", ...(m.extraPages ?? []).map((p) => p.title)];
+  const tabs = ["Overview", ...(m.extraPages ?? []).map((p) => p.title), "All files"];
+  const filesTab = tabs.length - 1;
   const [tab, setTab] = useState(0);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string>();
@@ -182,6 +185,11 @@ export function CourseHome({
                   <CourseHtml html={m.descriptionHtml} courseId={course.id} onLesson={onOpen} />
                 </section>
               )}
+              {m.overviewPath && (
+                <section>
+                  <MarkdownBody courseId={course.id} path={m.overviewPath} />
+                </section>
+              )}
               <section>
                 <h2 className="mb-1 text-xl font-semibold tracking-tight">Course content</h2>
                 <p className="mb-4 text-sm text-muted">
@@ -189,9 +197,12 @@ export function CourseHome({
                 </p>
                 <div className="overflow-hidden rounded-2xl border border-border bg-surface">
                   {m.sections.map((s, si) => {
+                    const groupHead = s.group && s.group !== m.sections[si - 1]?.group ? s.group : undefined;
                     const sDone = s.lessons.filter((l) => progress.get(l.path)?.completed).length;
                     return (
-                      <details key={s.id} className="group border-b border-border last:border-0" open={si === 0}>
+                      <div key={s.id}>
+                      {groupHead && <p className="border-b border-border bg-surface-2/60 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-primary">{groupHead}</p>}
+                      <details className="group border-b border-border last:border-0" open={si === 0}>
                         <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-4 hover:bg-surface-2">
                           <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-sm font-semibold text-primary">{si + 1}</span>
                           <div className="min-w-0 flex-1">
@@ -222,6 +233,7 @@ export function CourseHome({
                           })}
                         </ul>
                       </details>
+                      </div>
                     );
                   })}
                 </div>
@@ -266,6 +278,8 @@ export function CourseHome({
               </div>
             </aside>
           </div>
+        ) : tab === filesTab ? (
+          <FilesTab courseId={course.id} manifest={m} onOpen={onOpen} />
         ) : (
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-6 text-2xl font-semibold tracking-tight">{tabs[tab]}</h2>

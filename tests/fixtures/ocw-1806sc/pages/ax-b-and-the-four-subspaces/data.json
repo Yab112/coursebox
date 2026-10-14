@@ -1,0 +1,15 @@
+{
+ "content": "<p>« <a href=\"../../pages/syllabus/meet-the-tas/index.html\">Previous</a> | <a href=\"../../pages/ax-b-and-the-four-subspaces/the-geometry-of-linear-equations/index.html\">Next</a> »</p>\n<img src=\"../../static_resources/50ce4d8cddfa06b9c4d84f7e03a7e0e7_Unit_1_WIDE.jpg\" alt=\"\" loading=\"lazy\" decoding=\"async\" />\n<p> </p>\n<p>The big picture of linear algebra: Four Fundamental Subspaces.</p>\n<p>Mathematics is a tool for describing the world around us. Linear equations give some of the simplest descriptions, and systems of linear equations are made by combining several descriptions.</p>\n<p>In this unit we write systems of linear equations in the matrix form <em>Ax = b. We explore how the properties of A</em> and b determine the solutions x (if any exist) and pay particular attention to the solutions to <em>Ax = 0. For a given matrix A</em> we ask which b can be written in the form Ax.</p>\n<p>Looking for something specific in this course? The <a href=\"../../pages/resource-index/index.html\">Resource Index</a> compiles links to most course resources in a single page.</p>\n<p>« <a href=\"../../pages/syllabus/meet-the-tas/index.html\">Previous</a> | <a href=\"../../pages/ax-b-and-the-four-subspaces/the-geometry-of-linear-equations/index.html\">Next</a> »</p>\n",
+ "content_type": "page",
+ "description": "This section provides the first unit of the course: Ax = b and the four subspaces.",
+ "draft": false,
+ "iscjklanguage": false,
+ "learning_resource_types": [],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "CourseSection",
+ "title": "Unit I: Ax = b and the Four Subspaces",
+ "uid": "34303ce1-9b45-7241-22d2-bd33d64df688",
+ "video_metadata": {
+  "youtube_id": null
+ }
+}

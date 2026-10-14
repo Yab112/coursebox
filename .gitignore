@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 /public/pdf.worker.min.mjs
 /public/pdfjs/
+/e2e/.fixtures/
+/test-results/
+/playwright-report/

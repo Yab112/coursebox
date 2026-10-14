@@ -118,7 +118,31 @@ export function MediaViewer({
   );
 }
 
-export function YouTubeViewer({ id, start = 0 }: { id: string; start?: number }) {
+export function YouTubeViewer({
+  id,
+  start = 0,
+  remoteUrl,
+  courseId,
+  captionPaths,
+}: {
+  id: string;
+  start?: number;
+  remoteUrl?: string;
+  courseId: string;
+  captionPaths?: string[];
+}) {
+  const [mp4, setMp4] = useState(false);
+  if (mp4 && remoteUrl)
+    return (
+      <div className="flex h-full flex-col">
+        <div className="min-h-0 flex-1">
+          <MediaViewer kind="video" src={remoteUrl} courseId={courseId} captionPaths={captionPaths} initialPosition={start} />
+        </div>
+        <button onClick={() => setMp4(false)} className="shrink-0 bg-surface px-4 py-2 text-left text-xs text-primary hover:underline">
+          Switch back to YouTube
+        </button>
+      </div>
+    );
   return (
     <div className="flex h-full flex-col bg-black">
       <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -132,7 +156,18 @@ export function YouTubeViewer({ id, start = 0 }: { id: string; start?: number })
           />
         </div>
       </div>
-      <p className="shrink-0 bg-surface px-4 py-2 text-xs text-muted">Streaming from YouTube. This video wasn&apos;t included in the zip, so it needs an internet connection.</p>
+      <p className="shrink-0 bg-surface px-4 py-2 text-xs text-muted">
+        Streaming from YouTube (the zip doesn&apos;t include the video, so this needs internet).
+        {remoteUrl && (
+          <>
+            {" "}
+            <button onClick={() => setMp4(true)} className="font-medium text-primary hover:underline">
+              Play the MP4 instead
+            </button>{" "}
+            for speed control and the course&apos;s captions.
+          </>
+        )}
+      </p>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 import { Check, ChevronLeft, ChevronRight, Download, Eye, FileText, Lock } from "lucide-react";
+import { FileIcon } from "../file-icon";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useFileUrl } from "@/hooks/use-file-url";
@@ -8,6 +9,8 @@ import { downloadFile, openFileInTab, type FlatLesson } from "@/lib/course";
 import { updateProgress, type ProgressRecord } from "@/lib/db";
 import { cn, formatDuration } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { ArchiveViewer } from "../viewers/archive-viewer";
+import { CourseHtml } from "../viewers/course-html";
 import { MediaViewer, YouTubeViewer } from "../viewers/media-viewer";
 import { FallbackViewer, HtmlFileViewer, ImageViewer, MarkdownViewer, TextViewer } from "../viewers/simple-viewers";
 
@@ -32,7 +35,16 @@ function FileViewer({ courseId, lesson, progress, onComplete, onLesson, onPath, 
   const needsUrl = isStored && (["pdf", "video", "audio", "image"] as LessonType[]).includes(type);
   const url = useFileUrl(courseId, needsUrl ? path : undefined);
 
-  if (path.startsWith("youtube:")) return <YouTubeViewer id={path.slice(8)} start={progress?.position} />;
+  if (typeof lesson.meta?.html === "string")
+    return (
+      <div className="scrollbar-thin h-full overflow-auto">
+        <article className="mx-auto max-w-3xl px-5 py-10 sm:px-8">
+          <CourseHtml html={lesson.meta.html} courseId={courseId} onLesson={onLesson} interactive />
+        </article>
+      </div>
+    );
+  if (path.startsWith("youtube:"))
+    return <YouTubeViewer id={path.slice(8)} start={progress?.position} remoteUrl={lesson.meta?.remoteUrl as string | undefined} courseId={courseId} captionPaths={lesson.meta?.captionPaths as string[] | undefined} />;
   if (path.startsWith("remote:"))
     return <MediaViewer kind="video" src={path.slice(7)} courseId={courseId} initialPosition={progress?.position} onEnded={onComplete} />;
 
@@ -79,6 +91,7 @@ function FileViewer({ courseId, lesson, progress, onComplete, onLesson, onPath, 
     case "text":
       return <TextViewer courseId={courseId} path={path} />;
     default:
+      if (/\.zip$/i.test(path)) return <ArchiveViewer courseId={courseId} path={path} />;
       return <FallbackViewer path={path} size={lesson.meta?.size as number | undefined} onDownload={() => downloadFile(courseId, path)} />;
   }
 }
@@ -87,7 +100,7 @@ export function LessonView({
   courseId,
   lesson,
   progress,
-  solutionProgress,
+  progressFor,
   prev,
   next,
   onNavigate,
@@ -97,27 +110,36 @@ export function LessonView({
   courseId: string;
   lesson: FlatLesson;
   progress?: ProgressRecord;
-  solutionProgress?: ProgressRecord;
+  progressFor: (path: string) => ProgressRecord | undefined;
   prev?: FlatLesson;
   next?: FlatLesson;
   onNavigate: (id: string) => void;
   onToggleComplete: (path: string, done: boolean) => void;
   onPath: (p: string) => boolean;
 }) {
-  const solution = lesson.meta?.solution as { path: string; title: string; type: LessonType } | undefined;
-  const [view, setView] = useState<"main" | "solution">("main");
+  const solution = lesson.solution;
+  const attachments = lesson.attachments ?? [];
+  /** "main", an attachment path, or "solution" */
+  const [view, setView] = useState<string>("main");
   const [revealPrompt, setRevealPrompt] = useState(false);
-  const revealed = !!solutionProgress?.lastOpenedAt;
+  const revealed = !!(solution && progressFor(solution.path)?.lastOpenedAt);
 
   useEffect(() => {
     setView("main");
     setRevealPrompt(false);
   }, [lesson.id]);
 
-  const active = view === "solution" && solution ? { id: lesson.id + ":sol", path: solution.path, type: solution.type, title: solution.title } : lesson;
+  const att = attachments.find((a) => a.path === view);
+  const active: Pick<Lesson, "id" | "path" | "type" | "title" | "meta"> =
+    view === "solution" && solution
+      ? { id: lesson.id + ":sol", path: solution.path, type: solution.type, title: solution.title }
+      : att
+        ? { id: lesson.id + ":" + att.path, path: att.path, type: att.type, title: att.title }
+        : lesson;
   const completed = !!progress?.completed;
-  const isStored = !active.path.startsWith("youtube:") && !active.path.startsWith("remote:");
+  const isStored = !active.path.startsWith("youtube:") && !active.path.startsWith("remote:") && typeof active.meta?.html !== "string";
   const transcript = lesson.meta?.transcriptPath as string | undefined;
+  const hasTabs = !!solution || attachments.length > 0;
 
   const revealSolution = () => {
     updateProgress(courseId, solution!.path, { lastOpenedAt: Date.now() });
@@ -140,12 +162,21 @@ export function LessonView({
     </>
   );
 
+  const tabClass = (on: boolean) =>
+    cn(
+      "inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1 font-medium transition-colors",
+      on ? "bg-surface text-foreground shadow-sm" : "text-muted hover:text-foreground",
+    );
+
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* Lesson header */}
       <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-border bg-surface px-4 py-3 sm:px-6">
         <div className="min-w-0 flex-1">
-          <p className="truncate text-xs font-medium text-muted">{lesson.section.title}</p>
+          <p className="truncate text-xs font-medium text-muted">
+            {lesson.section.group ? `${lesson.section.group} › ` : ""}
+            {lesson.section.title}
+          </p>
           <h1 className="truncate text-[17px] font-semibold tracking-tight sm:text-lg">{lesson.title}</h1>
         </div>
         <div className="flex items-center gap-2">
@@ -164,25 +195,28 @@ export function LessonView({
         </div>
       </div>
 
-      {/* Assignment / solution switcher */}
-      {solution && (
-        <div className="flex shrink-0 items-center gap-2 border-b border-border bg-surface px-4 py-2 sm:px-6">
-          <div className="inline-flex rounded-lg bg-surface-2 p-1 text-sm">
-            <button
-              onClick={() => setView("main")}
-              className={cn("rounded-md px-3 py-1 font-medium transition-colors", view === "main" ? "bg-surface shadow-sm" : "text-muted")}
-            >
-              Problem
+      {/* Lesson / resources / solution switcher */}
+      {hasTabs && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border bg-surface px-4 py-2 sm:px-6">
+          <div className="scrollbar-thin inline-flex max-w-full overflow-x-auto rounded-lg bg-surface-2 p-1 text-sm" role="tablist">
+            <button role="tab" aria-selected={view === "main"} onClick={() => setView("main")} className={tabClass(view === "main")}>
+              <FileIcon type={lesson.type} className="size-3.5" /> {solution ? "Problem" : "Lesson"}
             </button>
-            <button
-              onClick={() => (revealed ? setView("solution") : setRevealPrompt(true))}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-md px-3 py-1 font-medium transition-colors",
-                view === "solution" ? "bg-surface shadow-sm" : "text-muted",
-              )}
-            >
-              {revealed ? <Eye className="size-3.5" /> : <Lock className="size-3.5" />} Solution
-            </button>
+            {attachments.map((a) => (
+              <button key={a.path} role="tab" aria-selected={view === a.path} onClick={() => setView(a.path)} className={tabClass(view === a.path)} title={a.title}>
+                <FileIcon type={a.type} className="size-3.5" /> <span className="max-w-[12rem] truncate">{a.title}</span>
+              </button>
+            ))}
+            {solution && (
+              <button
+                role="tab"
+                aria-selected={view === "solution"}
+                onClick={() => (revealed ? setView("solution") : setRevealPrompt(true))}
+                className={tabClass(view === "solution")}
+              >
+                {revealed ? <Eye className="size-3.5" /> : <Lock className="size-3.5" />} Solution
+              </button>
+            )}
           </div>
           {revealPrompt && (
             <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -204,7 +238,7 @@ export function LessonView({
           key={active.path}
           courseId={courseId}
           lesson={active}
-          progress={view === "solution" ? solutionProgress : progress}
+          progress={view === "main" ? progress : progressFor(active.path)}
           onComplete={() => view === "main" && !completed && onToggleComplete(lesson.path, true)}
           onLesson={onNavigate}
           onPath={onPath}

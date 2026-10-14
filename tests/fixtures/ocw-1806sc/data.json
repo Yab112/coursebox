@@ -1,0 +1,85 @@
+{
+ "course_description": "This course covers matrix theory and linear algebra, emphasizing topics useful in other disciplines such as physics, economics and social sciences, natural sciences, and engineering. It parallels the combination of theory and applications in Professor Strang’s textbook {{% resource_link \"4cdcc772-348a-4e48-9678-0a6cc9328fde\" \"_Introduction to Linear Algebra_\" %}}.\n\nCourse Format\n\nThis course has been designed for independent study. It provides everything you will need to understand the concepts covered in the course. The materials include:\n\n- A complete set of **Lecture Videos** by Professor Gilbert Strang.\n- **Summary Notes** for all videos along with suggested readings in Prof. Strang's textbook {{% resource_link \"4cdcc772-348a-4e48-9678-0a6cc9328fde\" \"_Linear Algebra_\" %}}.\n- **Problem Solving Videos** on every topic taught by an experienced MIT Recitation Instructor.\n- **Problem Sets** to do on your own with **Solutions** to check your answers against when you're done.\n- A selection of **Java® Demonstrations** to illustrate key concepts.\n- A full set of **Exams with Solutions**, including review material to help you prepare.",
+ "course_description_html": "<p>This course covers matrix theory and linear algebra, emphasizing topics useful in other disciplines such as physics, economics and social sciences, natural sciences, and engineering. It parallels the combination of theory and applications in Professor Strang’s textbook <a   class=\"external-link \"   target=\"_blank\"   href=\"http://math.mit.edu/~gs/linearalgebra/\"  aria-label=\"Introduction to Linear Algebra (opens in a new tab)\"  ><em>Introduction to Linear Algebra</em></a>.</p>\n<p>Course Format</p>\n<p>This course has been designed for independent study. It provides everything you will need to understand the concepts covered in the course. The materials include:</p>\n<ul>\n<li>A complete set of <strong>Lecture Videos</strong> by Professor Gilbert Strang.</li>\n<li><strong>Summary Notes</strong> for all videos along with suggested readings in Prof. Strang&rsquo;s textbook <a   class=\"external-link \"   target=\"_blank\"   href=\"http://math.mit.edu/~gs/linearalgebra/\"  aria-label=\"Linear Algebra (opens in a new tab)\"  ><em>Linear Algebra</em></a>.</li>\n<li><strong>Problem Solving Videos</strong> on every topic taught by an experienced MIT Recitation Instructor.</li>\n<li><strong>Problem Sets</strong> to do on your own with <strong>Solutions</strong> to check your answers against when you&rsquo;re done.</li>\n<li>A selection of <strong>Java® Demonstrations</strong> to illustrate key concepts.</li>\n<li>A full set of <strong>Exams with Solutions</strong>, including review material to help you prepare.</li>\n</ul>\n",
+ "course_image": {
+  "content": "ad862b68-e232-3331-fd3e-e944ed704f38",
+  "website": "18-06sc-linear-algebra-fall-2011"
+ },
+ "course_image_metadata": {
+  "content_type": "resource",
+  "description": "This optical illusion was seen on a restaurant floor in Paris, and coded in MATLAB by Shev Macnamara. Each color can become the tops of the cubes if you look at them correctly.",
+  "draft": false,
+  "file": "/courses/18-06sc-linear-algebra-fall-2011/ad862b68e2323331fd3ee944ed704f38_18-06scf11.jpg",
+  "file_size": 69836,
+  "file_type": "image/jpeg",
+  "image_metadata": {
+   "caption": "This optical illusion was seen on a restaurant floor in Paris, and [coded in MATLAB®](/courses/18-06sc-linear-algebra-fall-2011/resources/hexagonart) by {{% resource_link \"74ddbab5-3944-4f3e-a2ce-8bca75207fba\" \"Shev Macnamara\" %}}. Each color can become the tops of the cubes if you look at them correctly.",
+   "credit": "",
+   "image-alt": "Multi-colored cubes arranged to create the illusion of hexagons."
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWImage",
+  "resourcetype": "Image",
+  "title": "18-06scf11.jpg",
+  "uid": "ad862b68-e232-3331-fd3e-e944ed704f38",
+  "video_metadata": {
+   "youtube_id": null
+  }
+ },
+ "course_image_thumbnail": {
+  "content": "ecd40b5c-89e0-3d94-83b1-a25656487d63",
+  "website": "18-06sc-linear-algebra-fall-2011"
+ },
+ "course_title": "Linear Algebra",
+ "department_numbers": [
+  "18"
+ ],
+ "extra_course_numbers": "",
+ "image_src": "./static_resources/ad862b68e2323331fd3ee944ed704f38_18-06scf11.jpg",
+ "instructors": [
+  {
+   "first_name": "Gilbert",
+   "last_name": "Strang",
+   "middle_initial": "",
+   "salutation": "Prof.",
+   "title": "Prof. Gilbert Strang",
+   "uid": "84b06ab4-b3e7-63cc-f537-5507e60fa961",
+   "url": "https://ocw.mit.edu/search/?q=Prof.+Gilbert+Strang"
+  }
+ ],
+ "learning_resource_types": [
+  "Lecture Videos",
+  "Lecture Notes",
+  "Problem-solving Videos",
+  "Instructor Insights",
+  "Problem Sets",
+  "Problem Set Solutions",
+  "Exams",
+  "Exam Solutions"
+ ],
+ "legacy_uid": "b89637d2-d64a-bf78-96f6-04f5d40d48a9",
+ "level": [
+  "Undergraduate"
+ ],
+ "mit_learn_topics": [
+  [
+   "Science & Math",
+   "Mathematics"
+  ]
+ ],
+ "primary_course_number": "18.06SC",
+ "site_short_id": "18.06sc-fall-2011",
+ "site_uid": "23d385b4-4328-4fb0-b398-f5ca46ecae9a",
+ "site_url_path": "courses/18-06sc-linear-algebra-fall-2011",
+ "term": "Fall",
+ "title": "Course Metadata",
+ "topics": [
+  [
+   "Mathematics",
+   "Linear Algebra"
+  ]
+ ],
+ "year": "2011"
+}

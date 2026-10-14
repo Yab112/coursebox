@@ -57,12 +57,30 @@ export function mimeType(path: string): string {
   return MIME_BY_EXT[extname(path)] ?? "application/octet-stream";
 }
 
-/** Junk that never belongs in a course (OS metadata, hidden files). */
+const JUNK_DIRS = new Set(["__MACOSX", "node_modules", "__pycache__", ".ipynb_checkpoints", "venv", ".venv", ".git", ".svn", ".idea", ".vscode"]);
+
+/** Junk that never belongs in a course (OS metadata, hidden files, tooling folders). */
 export function isJunk(path: string): boolean {
   const parts = path.split("/");
-  if (parts.some((p) => p === "__MACOSX" || (p.startsWith(".") && p.length > 1))) return true;
+  if (parts.some((p) => JUNK_DIRS.has(p) || (p.startsWith(".") && p.length > 1))) return true;
   const b = parts[parts.length - 1].toLowerCase();
-  return b === "thumbs.db" || b === "desktop.ini" || b === "";
+  return b === "thumbs.db" || b === "desktop.ini" || b === "" || b.endsWith(".pyc") || b.endsWith(".url") || b.endsWith(".lnk");
+}
+
+/** Build/site assets: never lessons when the course is a website export. */
+export const ASSET_EXT = new Set(["css", "js", "mjs", "cjs", "map", "woff", "woff2", "ttf", "eot", "otf", "ico"]);
+
+/** Files worth surfacing to a learner if no analyzer placed them. */
+const CONTENT_EXT = new Set([
+  "pdf", "mp4", "webm", "mov", "m4v", "mkv", "avi", "ogv", "mp3", "wav", "m4a", "ogg", "flac", "aac", "opus",
+  "md", "markdown", "txt", "html", "htm", "ipynb", "doc", "docx", "ppt", "pptx", "xls", "xlsx", "odt", "odp", "ods",
+  "key", "pages", "numbers", "rtf", "epub", "tex", "csv", "tsv", "zip", "tar", "gz", "tgz", "7z", "rar",
+  "py", "r", "m", "jl", "java", "c", "cpp", "h", "hpp", "cs", "go", "rs", "rb", "scala", "sql", "sh", "nb", "mat", "rmd",
+  "png", "jpg", "jpeg", "gif", "webp", "svg",
+]);
+
+export function isContentFile(path: string): boolean {
+  return CONTENT_EXT.has(extname(path));
 }
 
 /** "01 - intro_video.mp4" -> { title: "Intro Video", num: 1 } */
@@ -76,6 +94,7 @@ export function cleanTitle(name: string): { title: string; num?: number } {
   }
   const words = base
     .replace(/[_]+/g, " ")
+    .replace(/\s+[-–—|]+\s+/g, " · ")
     .replace(/(?<=[A-Za-z])-|-(?=[A-Za-z])/g, " ")
     .replace(/\s+/g, " ")
     .trim();

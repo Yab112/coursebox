@@ -115,3 +115,25 @@ body {
 /* react-pdf */
 .react-pdf__Page { background: white; box-shadow: var(--shadow); }
 .react-pdf__Page canvas { display: block; }
+
+/* OCW in-class questions: pure-CSS right/wrong feedback, hide site chrome */
+.course-html .material-icons,
+.course-html .show-offline,
+.course-html .video-embed,
+.course-html [class*="video-tab"],
+.course-html [class*="video-download"],
+.course-html .multiple_choice_buttons { display: none; }
+.course-html fieldset { border: 0; padding: 0; margin: 0.75rem 0; }
+.course-html .multiple-choice-div label {
+  display: flex; align-items: center; gap: 0.6rem; margin: 0.4rem 0; padding: 0.55rem 0.85rem;
+  border: 1px solid var(--border); border-radius: 0.65rem; background: var(--surface); cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.course-html .multiple-choice-div label:hover { border-color: var(--primary); }
+.course-html .multiple-choice-div input { accent-color: var(--primary); }
+.course-html input:checked ~ .correctness-icon { display: inline-flex !important; margin-left: auto; font-size: 0; }
+.course-html input:checked ~ .correctness-icon-correct::after { content: "✓ Correct"; font-size: 0.8rem; font-weight: 600; color: var(--success); }
+.course-html input:checked ~ .correctness-icon-wrong::after { content: "✗ Try again"; font-size: 0.8rem; font-weight: 600; color: #dc2626; }
+.course-html label:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+.course-html details.mc-solution { margin: 0.5rem 0 2rem; }
+.course-html details.mc-solution > summary { cursor: pointer; color: var(--primary); font-weight: 500; font-size: 0.9rem; }

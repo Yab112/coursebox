@@ -1,0 +1,18 @@
+{
+ "content": "<p>« <a href=\"../../../pages/ax-b-and-the-four-subspaces/transposes-permutations-vector-spaces/index.html\">Previous</a> | <a href=\"../../../pages/ax-b-and-the-four-subspaces/solving-ax-0-pivot-variables-special-solutions/index.html\">Next</a> »</p>\n\n    <h3 id=\"session-overview\">Session Overview</h3>\n\n<p><table>\n<tbody>\n<tr>\n<td>\n\n<img src=\"../../../static_resources/6afa43439fd1599fdf6afc8a66641e30_1_6.jpg\" alt=\"Figure excerpted from ‘Introduction to Linear Algebra’ by G.S. Strang\" loading=\"lazy\" decoding=\"async\" />\n</td>\n<td>\n\nThe column space of a matrix <em>A</em> tells us when the equation <em>Ax = b will have a solution x. The null space of A</em> tells us which values of x solve the equation Ax = 0.\n</td>\n</tr>\n</tbody>\n</table>\n</p>\n\n    <h3 id=\"session-activities\">Session Activities</h3>\n\n\n    <h4 id=\"lecture-video-and-summary\">Lecture Video and Summary</h4>\n\n<ul>\n<li>Watch the video lecture <a href=\"../../../resources/column-space-and-nullspace/index.html\">Column Space and Nullspace</a></li>\n<li>Read the accompanying <a href=\"../../../resources/mit18_06scf11_ses1-6sum/index.html\">lecture summary (PDF)</a></li>\n<li><a href=\"../../../resources/8o5cmfpeo6g-1/index.html\">Lecture video transcript (PDF)</a></li>\n</ul>\n\n    <h4 id=\"suggested-reading\">Suggested Reading</h4>\n\n<ul>\n<li>Read Section 3.1 through 3.2 in the 4<sup>th</sup> or 5<sup>th</sup> edition.</li>\n</ul>\n\n    <h4 id=\"problem-solving-video\">Problem Solving Video</h4>\n\n<ul>\n<li>Watch the recitation video on <a href=\"../../../resources/vector-subspaces/index.html\">Vector Subspaces</a></li>\n<li><a href=\"../../../resources/s8dqzje4v8u-1/index.html\">Recitation video transcript (PDF)</a></li>\n</ul>\n\n    <h3 id=\"check-yourself\">Check Yourself</h3>\n\n\n    <h4 id=\"problems-and-solutions\">Problems and Solutions</h4>\n\n<p>Work the problems on your own and check your answers when you&rsquo;re done.</p>\n<ul>\n<li><a href=\"../../../resources/mit18_06scf11_ses1-6prob/index.html\">Problems (PDF)</a></li>\n<li><a href=\"../../../resources/mit18_06scf11_ses1-6sol/index.html\">Solutions (PDF)</a></li>\n</ul>\n<p>« <a href=\"../../../pages/ax-b-and-the-four-subspaces/transposes-permutations-vector-spaces/index.html\">Previous</a> | <a href=\"../../../pages/ax-b-and-the-four-subspaces/solving-ax-0-pivot-variables-special-solutions/index.html\">Next</a> »</p>\n",
+ "content_type": "page",
+ "description": "This section provides a lesson on column space and nullspace.",
+ "draft": false,
+ "iscjklanguage": false,
+ "learning_resource_types": [],
+ "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+ "ocw_type": "CourseSection",
+ "parent_title": "Unit I: Ax = b and the Four Subspaces",
+ "parent_type": "CourseSection",
+ "parent_uid": "34303ce1-9b45-7241-22d2-bd33d64df688",
+ "title": "Column Space and Nullspace",
+ "uid": "bb16f055-bb0c-2fa6-b00b-24a82c138877",
+ "video_metadata": {
+  "youtube_id": null
+ }
+}
