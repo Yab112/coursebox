@@ -1,0 +1,16 @@
+
+{
+  "content": "<p><table>\n\n<thead>\n\n<tr>\n\n<th>\n\nASSIGNMENTS\n</th>\n\n<th>\n\nSOLUTIONS\n</th>\n</p>\n</tr>\n\n<p></thead>\n\n<tr>\n\n<td>\n\n<a href=\"../../resources/assignment-1/index.html\">Assignment 1 (PDF)</a>\n</td>\n\n<td>\n\n<a href=\"../../resources/assignment-1-solution/index.html\">Assignment 1 Solution (PDF)</a> (Courtesy of William Perry. Used with permission.)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n<a href=\"../../resources/assignment-2/index.html\">Assignment 2 (PDF)</a>\n</td>\n\n<td>\n\n<a href=\"../../resources/assignment-2-solution/index.html\">Assignment 2 Solution (PDF)</a> (Courtesy of William Perry. Used with permission.)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n<a href=\"../../resources/assignment-3/index.html\">Assignment 3 (PDF)</a>\n</td>\n\n<td>\n\n<a href=\"../../resources/assignment-3-solution/index.html\">Assignment 3 Solution (PDF)</a> (Courtesy of William Perry. Used with permission.)\n</td>\n</p>\n</tr>\n\n</table>\n\n",
+  "content_type": "page",
+  "description": "This section provides three assignments for the course along with solutions.",
+  "draft": false,
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Assignments"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "CourseSection",
+  "title": "Assignments",
+  "uid": "44a4b359-3cca-4b43-9cc9-f098b4748d28"
+}
+

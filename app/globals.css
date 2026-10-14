@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f7f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f2f5;
+  --foreground: #16171d;
+  --muted: #5d6170;
+  --subtle: #8a8f9e;
+  --border: #e4e5ea;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-soft: #eef0ff;
+  --primary-foreground: #ffffff;
+  --success: #16a34a;
+  --success-soft: #e8f7ee;
+  --warning: #b45309;
+  --warning-soft: #fdf3e2;
+  --ring: rgba(79, 70, 229, 0.35);
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0 8px 32px rgba(16, 24, 40, 0.12);
+  --viewer: #eceef2;
+}
+
+.dark {
+  --background: #0d0e12;
+  --surface: #15171c;
+  --surface-2: #1c1f26;
+  --foreground: #ececf1;
+  --muted: #a3a7b5;
+  --subtle: #747988;
+  --border: #272a33;
+  --primary: #818cf8;
+  --primary-hover: #a5b4fc;
+  --primary-soft: #1e1f3a;
+  --primary-foreground: #0d0e12;
+  --success: #4ade80;
+  --success-soft: #11291b;
+  --warning: #fbbf24;
+  --warning-soft: #2b2211;
+  --ring: rgba(129, 140, 248, 0.4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --viewer: #0a0b0e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-viewer: var(--viewer);
+  --shadow-card: var(--shadow);
+  --shadow-pop: var(--shadow-lg);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--ring);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 0%, var(--border) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* Course HTML content (OCW pages, html lessons) */
+.course-html table { width: 100%; border-collapse: collapse; font-size: 0.925rem; }
+.course-html th, .course-html td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; vertical-align: top; text-align: left; }
+.course-html th { background: var(--surface-2); font-weight: 600; }
+.course-html td > p, .course-html th > p { margin: 0; }
+.course-html a[href^="#lesson="] { color: var(--primary); font-weight: 500; }
+
+/* react-pdf */
+.react-pdf__Page { background: white; box-shadow: var(--shadow); }
+.react-pdf__Page canvas { display: block; }

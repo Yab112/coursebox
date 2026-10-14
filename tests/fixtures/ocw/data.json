@@ -1,0 +1,123 @@
+{
+  "course_description": "Broadly speaking, Machine Learning refers to the automated identification of patterns in data. As such it has been a fertile ground for new statistical and algorithmic developments. The purpose of this course is to provide a mathematically rigorous introduction to these developments with emphasis on methods and their analysis.\n\nYou can read more about Prof. Rigollet's work and courses {{% resource_link \"9f61dcda-01a9-43fd-a73e-986f28bc2830\" \"on his website\" %}}.\n",
+  "course_description_html": "<p>Broadly speaking, Machine Learning refers to the automated identification of patterns in data. As such it has been a fertile ground for new statistical and algorithmic developments. The purpose of this course is to provide a mathematically rigorous introduction to these developments with emphasis on methods and their analysis.</p>\n<p>You can read more about Prof. Rigollet&rsquo;s work and courses <a   class=\"external-link \"   target=\"_blank\"   href=\"http://www-math.mit.edu/~rigollet/\"  aria-label=\"on his website (opens in a new tab)\"  >on his website</a>.</p>\n",
+  "course_image": {
+    "content": "1db49f00-74b5-bdd4-f63a-bac031cc5a63",
+    "website": "18-657-mathematics-of-machine-learning-fall-2015"
+  },
+  "course_image_metadata": {
+    "content_type": "resource",
+    "description": "Two points on the real line are shattered by half-lines. Image by Prof. Philippe Rigollet.",
+    "draft": false,
+    "file": "/courses/18-657-mathematics-of-machine-learning-fall-2015/1db49f0074b5bdd4f63abac031cc5a63_18-657f15.jpg",
+    "file_size": 21272,
+    "file_type": "image/jpeg",
+    "image_metadata": {
+      "caption": "Two points on the real line are shattered by half-lines. (Image by Prof. Philippe Rigollet.)",
+      "credit": "Image by Prof. Philippe Rigollet.",
+      "image-alt": "Four lines showing 4 (0,1) patterns."
+    },
+    "iscjklanguage": false,
+    "learning_resource_types": [],
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "ocw_type": "OCWImage",
+    "resourcetype": "Image",
+    "title": "Two points on the real line are shattered by half-lines",
+    "uid": "1db49f00-74b5-bdd4-f63a-bac031cc5a63"
+  },
+  "course_image_thumbnail": {
+    "content": "5f344f06-f06b-6e8a-b8f7-60d0a45f233e",
+    "website": "18-657-mathematics-of-machine-learning-fall-2015"
+  },
+  "course_title": "Mathematics of Machine Learning",
+  "department_numbers": [
+    "18"
+  ],
+  "extra_course_numbers": "",
+  "image_src": "./static_resources/1db49f0074b5bdd4f63abac031cc5a63_18-657f15.jpg",
+  "instructors": [
+    {
+      "first_name": "Philippe",
+      "last_name": "Rigollet",
+      "middle_initial": "",
+      "salutation": "Prof.",
+      "title": "Prof. Philippe Rigollet",
+      "uid": "5538cd9e-e33c-97ad-03dc-aa446c8cbda1",
+      "url": "https://ocw.mit.edu/search/?q=Prof.+Philippe+Rigollet"
+    }
+  ],
+  "learning_resource_types": [
+    "Lecture Notes",
+    "Problem Sets",
+    "Problem Set Solutions"
+  ],
+  "legacy_uid": "9d0c897e-6411-00cd-60dd-b8e697593db1",
+  "level": [
+    "Graduate"
+  ],
+  "mit_learn_topics": [
+    [
+      "Data Science, Analytics & Computer Technology",
+      "AI"
+    ],
+    [
+      "Data Science, Analytics & Computer Technology",
+      "Algorithms and Data Structures"
+    ],
+    [
+      "Data Science, Analytics & Computer Technology",
+      "Computer Science"
+    ],
+    [
+      "Data Science, Analytics & Computer Technology",
+      "Data Science"
+    ],
+    [
+      "Engineering"
+    ],
+    [
+      "Data Science, Analytics & Computer Technology",
+      "Machine Learning"
+    ],
+    [
+      "Science & Math",
+      "Mathematics"
+    ]
+  ],
+  "primary_course_number": "18.657",
+  "site_short_id": "18.657-fall-2015",
+  "site_uid": "17145049-64c1-43ad-a864-ed4903a78635",
+  "site_url_path": "courses/18-657-mathematics-of-machine-learning-fall-2015",
+  "term": "Fall",
+  "title": "Course Metadata",
+  "topics": [
+    [
+      "Engineering",
+      "Computer Science",
+      "Algorithms and Data Structures"
+    ],
+    [
+      "Mathematics",
+      "Applied Mathematics"
+    ],
+    [
+      "Mathematics",
+      "Probability and Statistics"
+    ],
+    [
+      "Mathematics",
+      "Discrete Mathematics"
+    ],
+    [
+      "Engineering",
+      "Computer Science",
+      "Artificial Intelligence"
+    ],
+    [
+      "Engineering",
+      "Computer Science",
+      "Data Mining"
+    ]
+  ],
+  "year": "2015"
+}

@@ -1,0 +1,16 @@
+
+{
+  "audience": [],
+  "content": "\n    <h3 id=\"course-meeting-times\">Course Meeting Times</h3>\n\n<p>Lectures: 2 sessions / week, 1.5 hours / session</p>\n\n    <h3 id=\"prerequisites\">Prerequisites</h3>\n\n<p><a     href=\"https://ocw.mit.edu/courses/18-100c-real-analysis-fall-2012/\"  ><em>18.100C Real Analysis</em></a></p>\n<p><a     href=\"https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/\"  ><em>18.06SC Linear Algebra</em></a></p>\n<p><a     href=\"https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/\"  ><em>18.05 Introduction to Probability and Statistics</em></a></p>\n\n    <h3 id=\"description\">Description</h3>\n\n<p>Broadly speaking, Machine Learning refers to the automated identification of patterns in data. As such it has been a fertile ground for new statistical and algorithmic developments. The purpose of this course is to provide a mathematically rigorous introduction to these developments with emphasis on methods and their analysis.</p>\n\n    <h3 id=\"the-topics-covered\">The Topics Covered</h3>\n\n<p>The class will be split in three main parts:</p>\n<ol>\n<li>The Statistical Theory of Machine Learning.\n<ul>\n<li>Classification, Regression, Aggregation</li>\n<li>Empirical Risk Minimization, Regularization</li>\n<li>Suprema of Empirical Processes</li>\n</ul>\n</li>\n<li>Algorithms and Convexity.\n<ul>\n<li>Boosting</li>\n<li>Kernel Methods</li>\n<li>Convex Optimization</li>\n</ul>\n</li>\n<li>Online Learning.\n<ul>\n<li>Online Convex Optimization</li>\n<li>Partial Information: Bandit Problems</li>\n<li>Blackwell&rsquo;s Approachability</li>\n</ul>\n</li>\n</ol>\n\n    <h3 id=\"grading\">Grading</h3>\n\n<p><table>\n<thead>\n<tr>\n<th>\n\nACTIVITIES\n</th>\n<th>\n\nPERCENTAGES\n</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>\n\nAssignments\n</td>\n<td>\n\n40%\n</td>\n</tr>\n<tr>\n<td>\n\nFinal Project\n</td>\n<td>\n\n50%\n</td>\n</tr>\n<tr>\n<td>\n\nLecture Notes Scribing\n</td>\n<td>\n\n10%\n</td>\n</tr>\n</tbody>\n</table>\n</p>\n<ol>\n<li>\n<p>Homework 40%     </p>\n<p>There are 3 homework assignments.</p>\n</li>\n<li>\n<p>Final project 50%     </p>\n<p>The final project should be in any area related to one of the topics of the course or use tools that are developed in class. Examples include: implementing an algorithm for real data, extend an existing method or prove a theoretical result (or a combination of these). You will need to submit a written report (~10 pages) and give a presentation in class in the last week of semester (the duration will depend on the size of the class).</p>\n</li>\n<li>\n<p>Lecture notes scribing 10%</p>\n</li>\n</ol>\n",
+  "content_type": "page",
+  "description": "This syllabus section provides the course description and information on meeting times, prerequisites, topics covered, and grading.",
+  "draft": false,
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "level": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "CourseSection",
+  "title": "Syllabus",
+  "uid": "373a7b53-dea9-cd8c-1d07-b5858ef9faa0"
+}
+

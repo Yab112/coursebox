@@ -1,0 +1,21 @@
+{
+  "content": "<p>Two points on the real line are shattered by half-lines. Image by Prof. Philippe Rigollet.</p>\n",
+  "content_type": "resource",
+  "description": "Two points on the real line are shattered by half-lines. Image by Prof. Philippe Rigollet.",
+  "draft": false,
+  "file": "/courses/18-657-mathematics-of-machine-learning-fall-2015/1db49f0074b5bdd4f63abac031cc5a63_18-657f15.jpg",
+  "file_size": 21272,
+  "file_type": "image/jpeg",
+  "image_metadata": {
+    "caption": "Two points on the real line are shattered by half-lines. (Image by Prof. Philippe Rigollet.)",
+    "credit": "Image by Prof. Philippe Rigollet.",
+    "image-alt": "Four lines showing 4 (0,1) patterns."
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWImage",
+  "resourcetype": "Image",
+  "title": "Two points on the real line are shattered by half-lines",
+  "uid": "1db49f00-74b5-bdd4-f63a-bac031cc5a63"
+}
