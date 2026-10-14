@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./test";
 import { importCourse } from "./helpers";
 
 test("mobile: sidebar is a drawer and dark mode toggles", async ({ page }) => {

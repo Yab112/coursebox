@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useFileUrl } from "@/hooks/use-file-url";
 import { basename, dirname, extname } from "@/lib/analyzers/utils";
-import { db } from "@/lib/db";
+import { getFile } from "@/lib/files";
 import { cn, formatBytes } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { CourseHtml, resolvePath } from "./course-html";
@@ -18,11 +18,11 @@ export function useFileText(courseId: string, path: string) {
   useEffect(() => {
     let cancelled = false;
     setText(undefined);
-    db.files.get([courseId, path]).then(async (f) => {
+    getFile(courseId, path).then(async (blob) => {
       if (cancelled) return;
-      if (!f) return setText(null);
-      setSize(f.size);
-      const t = await f.blob.slice(0, MAX_TEXT).text();
+      if (!blob) return setText(null);
+      setSize(blob.size);
+      const t = await blob.slice(0, MAX_TEXT).text();
       if (!cancelled) setText(t);
     });
     return () => {

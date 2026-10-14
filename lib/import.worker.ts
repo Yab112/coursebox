@@ -125,6 +125,11 @@ ctx.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
         totalSize: entries.reduce((n, e) => n + e.size, 0),
         createdAt: existing?.createdAt ?? now,
         updatedAt: now,
+        // Keep the link to the account copy; the new version is uploaded as a revision.
+        remoteId: existing?.remoteId,
+        ownerId: existing?.ownerId,
+        syncState: existing?.remoteId ? "local" : undefined,
+        lazy: false,
       });
       zip = null;
       entries = [];

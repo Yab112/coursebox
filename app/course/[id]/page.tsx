@@ -4,6 +4,8 @@ import { ArrowLeft, Menu } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AccountMenu } from "@/components/auth/account-menu";
+import { SavePrompt } from "@/components/auth/save-prompt";
 import { CourseHome } from "@/components/course/course-home";
 import { LessonView } from "@/components/course/lesson-view";
 import { CourseSidebar } from "@/components/course/sidebar";
@@ -12,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { ProgressRing } from "@/components/ui/progress";
 import { downloadFile, flattenLessons, reanalyzeCourse } from "@/lib/course";
 import { MANIFEST_VERSION } from "@/lib/analyzers/types";
+import { pullProgress } from "@/lib/cloud";
+import { noteLastLesson } from "@/lib/sync";
 import { addStudyTime, db, updateProgress, type ProgressRecord } from "@/lib/db";
 import { cn } from "@/lib/utils";
 
@@ -56,7 +60,7 @@ function CoursePlayer() {
   );
 
   const toggleComplete = useCallback(
-    (path: string, done: boolean) => updateProgress(id, path, { completed: done, completedAt: done ? Date.now() : undefined }),
+    (path: string, done: boolean) => updateProgress(id, path, { completed: done, completedAt: done ? Date.now() : undefined, changedAt: Date.now() }),
     [id],
   );
 
@@ -67,11 +71,21 @@ function CoursePlayer() {
         go(l.id);
         return true;
       }
-      db.files.get([id, path]).then((f) => f && downloadFile(id, path));
+      downloadFile(id, path);
       return false;
     },
     [lessons, go, id],
   );
+
+  // Account courses: bring in progress made on other devices.
+  const remoteId = course?.remoteId;
+  useEffect(() => {
+    if (!remoteId) return;
+    pullProgress(id).catch(() => undefined);
+    const onVisible = () => document.visibilityState === "visible" && pullProgress(id).catch(() => undefined);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [id, remoteId]);
 
   // Courses imported with an older analyzer are re-analyzed once (progress is keyed by path, so it survives).
   const upgraded = useRef(false);
@@ -87,6 +101,7 @@ function CoursePlayer() {
     const now = Date.now();
     db.state.put({ courseId: id, lastLessonPath: lesson.path, lastOpenedAt: now });
     updateProgress(id, lesson.path, { lastOpenedAt: now });
+    noteLastLesson(id, lesson.path);
   }, [id, lesson?.path]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -157,8 +172,10 @@ function CoursePlayer() {
             <span className="text-sm tabular-nums text-muted">{Math.round(pct)}%</span>
           </div>
           <ThemeToggle />
+          <AccountMenu compact />
         </div>
       </header>
+      {course.syncState !== "synced" && <SavePrompt courseId={id} title={course.manifest.title} />}
 
       <div className="relative flex min-h-0 flex-1">
         {/* Sidebar: static on desktop, drawer on mobile */}

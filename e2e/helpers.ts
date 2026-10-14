@@ -5,11 +5,24 @@ import { OUT } from "./fixtures";
 export const zip = (name: string) => path.join(OUT, name);
 
 /** Drop a zip on the library page and wait for the course page. */
-export async function importCourse(page: Page, file: string) {
+export async function importCourse(page: Page, file: string, opts: { keepPrompt?: boolean } = {}) {
   await page.goto("/");
   await page.locator('input[type="file"]').setInputFiles(zip(file));
   await page.waitForURL(/\/course\//, { timeout: 45_000 });
   await expect(page.locator("aside").first()).toBeVisible();
+  if (!opts.keepPrompt) await dismissSavePrompt(page);
+}
+
+/** Visitors who aren't signed in are asked once per course whether to save it. */
+export async function dismissSavePrompt(page: Page) {
+  const prompt = page.getByRole("dialog", { name: "Keep this course?" });
+  try {
+    await prompt.waitFor({ state: "visible", timeout: 4000 });
+  } catch {
+    return; // signed in, or already dismissed
+  }
+  await prompt.getByRole("button", { name: "Not now" }).click();
+  await expect(prompt).toBeHidden();
 }
 
 export const sidebar = (page: Page) => page.locator("aside").first();

@@ -1,10 +1,11 @@
 "use client";
-import { BookOpen, MoreVertical, PlayCircle, Trash2 } from "lucide-react";
+import { BookOpen, Cloud, CloudOff, CloudUpload, Loader2, MoreVertical, PlayCircle, RotateCw, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useFileUrl } from "@/hooks/use-file-url";
 import type { CourseRecord } from "@/lib/db";
 import { cn, gradientFor } from "@/lib/utils";
+import { useAuth } from "../auth/auth-provider";
 import { Progress } from "../ui/progress";
 
 export function CourseCover({ course, className }: { course: CourseRecord; className?: string }) {
@@ -40,6 +41,9 @@ export function CourseCard({
   const m = course.manifest;
   const [menu, setMenu] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const { status, saveCourse, openAuth } = useAuth();
+  const authed = status === "authed";
+  const saved = course.syncState === "synced" && !!course.remoteId;
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,6 +77,7 @@ export function CourseCard({
           <h3 className="line-clamp-2 font-semibold leading-snug">{m.title}</h3>
           {m.instructor && <p className="line-clamp-1 text-sm text-muted">{m.instructor}</p>}
           <div className="mt-auto pt-4">
+            <SyncBadge course={course} authed={authed} onRetry={() => saveCourse(course.id).catch(() => undefined)} />
             <Progress value={pct} />
             <div className="mt-2 flex justify-between text-xs text-muted">
               <span>{pct >= 100 ? "Completed 🎉" : completed ? `${Math.round(pct)}% complete` : "Not started"}</span>
@@ -93,17 +98,65 @@ export function CourseCard({
           <MoreVertical className="size-4" />
         </button>
         {menu && (
-          <div className="absolute right-0 mt-1 w-48 rounded-xl border border-border bg-surface p-1 shadow-pop">
+          <div className="absolute right-0 mt-1 w-60 rounded-xl border border-border bg-surface p-1 shadow-pop">
+            {!saved && course.syncState !== "uploading" && (
+              <button
+                onClick={() => {
+                  setMenu(false);
+                  if (authed) saveCourse(course.id).catch(() => undefined);
+                  else openAuth("signup", { saveCourseId: course.id, reason: "Create an account to keep this course and your progress." });
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-surface-2"
+              >
+                <CloudUpload className="size-4" /> Save to account
+              </button>
+            )}
             <button
               onClick={() => (confirming ? onDelete() : setConfirming(true))}
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-500 hover:bg-surface-2"
+              className="flex w-full items-start gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-500 hover:bg-surface-2"
             >
-              <Trash2 className="size-4" /> {confirming ? "Click again to delete" : "Remove course"}
+              <Trash2 className="mt-0.5 size-4 shrink-0" />
+              <span>
+                {confirming ? "Click again to delete" : saved ? "Delete course" : "Remove course"}
+                {saved && <span className="block text-xs text-muted">From your account and this device. Frees a course slot.</span>}
+              </span>
             </button>
           </div>
         )}
       </div>
     </div>
+  );
+}
+
+function SyncBadge({ course, authed, onRetry }: { course: CourseRecord; authed: boolean; onRetry: () => void }) {
+  const base = "mb-2 flex items-center gap-1.5 text-xs";
+  if (course.syncState === "uploading")
+    return (
+      <p className={cn(base, "text-primary")}>
+        <Loader2 className="size-3.5 animate-spin" /> Saving to account… {Math.round((course.syncProgress ?? 0) * 100)}%
+      </p>
+    );
+  if (course.syncState === "error")
+    return (
+      <p className={cn(base, "text-warning")} title={course.syncError}>
+        <CloudOff className="size-3.5" /> Not saved: {course.syncError?.slice(0, 60)}
+        {authed && (
+          <button onClick={(e) => (e.preventDefault(), onRetry())} className="ml-auto inline-flex items-center gap-1 font-medium text-primary hover:underline">
+            <RotateCw className="size-3" /> Retry
+          </button>
+        )}
+      </p>
+    );
+  if (course.syncState === "synced" && course.remoteId)
+    return (
+      <p className={cn(base, "text-success")}>
+        <Cloud className="size-3.5" /> Saved to your account
+      </p>
+    );
+  return (
+    <p className={cn(base, "text-subtle")}>
+      <CloudOff className="size-3.5" /> This device only
+    </p>
   );
 }
 

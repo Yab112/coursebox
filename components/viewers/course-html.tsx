@@ -1,7 +1,7 @@
 "use client";
 import DOMPurify from "dompurify";
 import { useEffect, useMemo, useRef } from "react";
-import { db } from "@/lib/db";
+import { getFile } from "@/lib/files";
 import { cn } from "@/lib/utils";
 
 /** Resolve "../img/a.png" against the directory of the current file. */
@@ -76,9 +76,9 @@ export function CourseHtml({
       const rel = img.getAttribute("data-course-src") ?? img.getAttribute("src");
       if (!rel || /^(https?:|data:|blob:)/i.test(rel)) return;
       const path = img.hasAttribute("data-course-src") ? rel : resolvePath(baseDir, rel.split(/[?#]/)[0]);
-      const f = await db.files.get([courseId, path]);
-      if (f) {
-        const u = URL.createObjectURL(f.blob);
+      const blob = await getFile(courseId, path);
+      if (blob) {
+        const u = URL.createObjectURL(blob);
         urls.push(u);
         img.src = u;
       }

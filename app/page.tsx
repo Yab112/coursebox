@@ -3,18 +3,26 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { BookOpenCheck, Clock, Library, UploadCloud } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { AccountMenu } from "@/components/auth/account-menu";
+import { useAuth } from "@/components/auth/auth-provider";
 import { CourseCard, CourseCardSkeleton } from "@/components/library/course-card";
 import { Dropzone } from "@/components/library/dropzone";
 import { ImportPanel } from "@/components/library/import-panel";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useImporter } from "@/hooks/use-importer";
-import { db, deleteCourse } from "@/lib/db";
+import { deleteCourseEverywhere } from "@/lib/cloud";
+import { db } from "@/lib/db";
 import { formatBytes, formatDuration } from "@/lib/utils";
 
 export default function LibraryPage() {
   const router = useRouter();
-  const importer = useImporter((id) => router.push(`/course/${id}`));
+  const { status, saveCourse } = useAuth();
+  const importer = useImporter((id) => {
+    // Signed in: the new course is saved to the account in the background.
+    if (status === "authed") saveCourse(id).catch(() => undefined);
+    router.push(`/course/${id}`);
+  });
   const courses = useLiveQuery(() => db.courses.toArray());
   const progress = useLiveQuery(() => db.progress.toArray());
   const states = useLiveQuery(() => db.state.toArray());
@@ -89,6 +97,7 @@ export default function LibraryPage() {
           <div className="ml-auto flex items-center gap-1">
             {usage !== undefined && <span className="mr-2 hidden text-xs text-subtle sm:inline">{formatBytes(usage)} stored locally</span>}
             <ThemeToggle />
+            <AccountMenu />
           </div>
         </div>
       </header>
@@ -126,7 +135,7 @@ export default function LibraryPage() {
                 course={c}
                 completed={stats.per.get(c.id)?.completed ?? 0}
                 total={stats.per.get(c.id)?.total ?? 0}
-                onDelete={() => deleteCourse(c.id)}
+                onDelete={() => deleteCourseEverywhere(c.id)}
               />
             ))}
             <Dropzone onFile={importer.start} compact />

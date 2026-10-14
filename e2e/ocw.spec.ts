@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./test";
 import { completedCount, importCourse, openLesson, sidebar, zip } from "./helpers";
 
 test.describe("MIT OCW course (18.657)", () => {

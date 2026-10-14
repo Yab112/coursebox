@@ -20,6 +20,7 @@ const eslintConfig = [
       "next-env.d.ts",
       "public/pdf.worker.min.mjs",
       "public/pdfjs/**",
+      "server/**",
     ],
   },
 ];

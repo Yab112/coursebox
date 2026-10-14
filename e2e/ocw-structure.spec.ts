@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./test";
 import { importCourse, openLesson, sidebar } from "./helpers";
 
 test("6.0001: nested in-class question pages become grouped, interactive lessons", async ({ page }) => {

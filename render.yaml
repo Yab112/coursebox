@@ -1,0 +1,43 @@
+# Render Blueprint: the CourseBox API (server/). Secrets are entered in the Render dashboard (sync: false).
+services:
+  - type: web
+    name: coursebox-api
+    runtime: node
+    rootDir: server
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: DATABASE_SCHEMA
+        value: coursebox
+      - key: RUN_MIGRATIONS
+        value: "true"
+      - key: CORS_ORIGINS
+        sync: false # e.g. https://coursebox.vercel.app,http://localhost:3000
+      - key: STORAGE_DRIVER
+        value: s3
+      - key: S3_BUCKET
+        sync: false
+      - key: AWS_REGION
+        value: eu-west-1
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: PUBLIC_API_URL
+        sync: false # e.g. https://coursebox-api.onrender.com
+      - key: SIGNING_SECRET
+        generateValue: true
+      - key: COURSE_LIMIT
+        value: "2"
+      - key: MAX_COURSE_BYTES
+        value: "2147483648"

@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { basename, extname, fileType, isJunk, mimeType, naturalCompare } from "@/lib/analyzers/utils";
-import { db } from "@/lib/db";
+import { getFile } from "@/lib/files";
 import { formatBytes } from "@/lib/utils";
 import { FileIcon } from "../file-icon";
 import { Button } from "../ui/button";
@@ -26,10 +26,10 @@ export function ArchiveViewer({ courseId, path }: { courseId: string; path: stri
     let cancelled = false;
     setEntries(undefined);
     setOpen(undefined);
-    db.files.get([courseId, path]).then(async (f) => {
-      if (!f) return setEntries(null);
+    getFile(courseId, path).then(async (blob) => {
+      if (!blob) return setEntries(null);
       try {
-        const zip = await JSZip.loadAsync(f.blob);
+        const zip = await JSZip.loadAsync(blob);
         const list = Object.values(zip.files)
           .filter((e) => !e.dir && !isJunk(e.name))
           .map((e) => ({

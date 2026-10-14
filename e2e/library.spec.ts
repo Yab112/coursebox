@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./test";
 import { importCourse } from "./helpers";
 
 test("empty library invites a drop, then shows the imported course card", async ({ page }) => {

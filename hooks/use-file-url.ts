@@ -1,32 +1,32 @@
 "use client";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/db";
+import { getFile, getPlayableUrl } from "@/lib/files";
 
-/** Object URL for a stored course file; revoked automatically. undefined while loading, null if missing. */
-export function useFileUrl(courseId: string | undefined, path: string | undefined) {
+/**
+ * URL for a course file; revoked automatically. undefined while loading, null if missing.
+ * With `stream`, media of account courses plays straight from storage instead of downloading first.
+ */
+export function useFileUrl(courseId: string | undefined, path: string | undefined, stream = false) {
   const [url, setUrl] = useState<string | null | undefined>(undefined);
   useEffect(() => {
     if (!courseId || !path) {
       setUrl(null);
       return;
     }
-    let u: string | undefined;
+    let revoke: (() => void) | undefined;
     let cancelled = false;
     setUrl(undefined);
-    db.files.get([courseId, path]).then((f) => {
-      if (cancelled) return;
-      if (!f) return setUrl(null);
-      u = URL.createObjectURL(f.blob);
-      setUrl(u);
+    getPlayableUrl(courseId, path, stream).then((r) => {
+      if (cancelled) return r?.revoke?.();
+      revoke = r?.revoke;
+      setUrl(r?.url ?? null);
     });
     return () => {
       cancelled = true;
-      if (u) URL.revokeObjectURL(u);
+      revoke?.();
     };
-  }, [courseId, path]);
+  }, [courseId, path, stream]);
   return url;
 }
 
-export async function getFileBlob(courseId: string, path: string) {
-  return (await db.files.get([courseId, path]))?.blob;
-}
+export const getFileBlob = getFile;

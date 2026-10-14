@@ -1,11 +1,10 @@
 "use client";
-import { useLiveQuery } from "dexie-react-hooks";
 import { Download, ExternalLink, Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CourseManifest } from "@/lib/analyzers/types";
 import { basename, fileType, naturalCompare } from "@/lib/analyzers/utils";
 import { downloadFile, openFileInTab } from "@/lib/course";
-import { db } from "@/lib/db";
+import { listCourseFiles } from "@/lib/files";
 import { cn, formatBytes } from "@/lib/utils";
 import { FileIcon } from "../file-icon";
 
@@ -32,10 +31,10 @@ function placements(m: CourseManifest) {
 }
 
 export function FilesTab({ courseId, manifest, onOpen }: { courseId: string; manifest: CourseManifest; onOpen: (id: string) => void }) {
-  const rows = useLiveQuery(
-    () => db.files.where("courseId").equals(courseId).toArray((fs) => fs.map((f) => ({ path: f.path, size: f.size }))),
-    [courseId],
-  );
+  const [rows, setRows] = useState<{ path: string; size: number }[]>();
+  useEffect(() => {
+    listCourseFiles(courseId).then(setRows);
+  }, [courseId]);
   const [q, setQ] = useState("");
   const [onlyUnused, setOnlyUnused] = useState(false);
   const place = useMemo(() => placements(manifest), [manifest]);

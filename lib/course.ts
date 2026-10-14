@@ -1,7 +1,9 @@
 import { analyzeCourse } from "./analyzers";
 import type { CourseManifest, Lesson, Section } from "./analyzers/types";
 import { basename } from "./analyzers/utils";
+import { api, getToken } from "./api";
 import { db } from "./db";
+import { getFile, listCourseFiles, prefetch } from "./files";
 
 export type FlatLesson = Lesson & { section: Section; index: number };
 
@@ -14,22 +16,28 @@ export function flattenLessons(m: CourseManifest): FlatLesson[] {
 export async function reanalyzeCourse(courseId: string) {
   const course = await db.courses.get(courseId);
   if (!course) throw new Error("Course not found");
-  const keys = await db.files.where("courseId").equals(courseId).primaryKeys();
-  const files = keys.map((k) => k[1]);
+  const files = (await listCourseFiles(courseId)).map((f) => f.path);
+  // Analyzers only read metadata/text files; make sure those are on this device first.
+  await prefetch(courseId, files.filter((p) => /\.(json|html?|xml|md|markdown|txt)$/i.test(p)));
   const read = async (p: string) => {
-    const f = await db.files.get([courseId, p]);
-    if (!f) throw new Error(`missing ${p}`);
-    return f.blob.text();
+    const blob = await getFile(courseId, p);
+    if (!blob) throw new Error(`missing ${p}`);
+    return blob.text();
   };
   const { manifest, analyzer } = await analyzeCourse(files, read, { courseId, archiveName: course.archiveName });
   await db.courses.update(courseId, { manifest, analyzer, title: manifest.title, sourceKey: manifest.sourceKey, updatedAt: Date.now() });
+  // Keep the account copy's structure in step (other devices pick it up).
+  if (course.remoteId && getToken())
+    await api
+      .patchCourse(course.remoteId, { manifest, manifestVersion: manifest.version, analyzer, title: manifest.title })
+      .catch(() => undefined);
   return manifest;
 }
 
 export async function downloadFile(courseId: string, path: string) {
-  const f = await db.files.get([courseId, path]);
-  if (!f) return;
-  const url = URL.createObjectURL(f.blob);
+  const blob = await getFile(courseId, path);
+  if (!blob) return;
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = basename(path).replace(/^[0-9a-f]{32}_/, "");
@@ -40,7 +48,7 @@ export async function downloadFile(courseId: string, path: string) {
 }
 
 export async function openFileInTab(courseId: string, path: string) {
-  const f = await db.files.get([courseId, path]);
-  if (!f) return;
-  window.open(URL.createObjectURL(f.blob), "_blank", "noopener");
+  const blob = await getFile(courseId, path);
+  if (!blob) return;
+  window.open(URL.createObjectURL(blob), "_blank", "noopener");
 }

@@ -3,7 +3,9 @@
 **Turn a downloaded course zip into your own Coursera/Udemy-style learning space.**
 Drop in an MIT OpenCourseWare export, a Udemy-style download or any folder of videos, PDFs and notes.
 CourseBox works out the structure (units, sessions, lectures, problem sets with solutions) and gives you a
-clean course player with progress tracking. Everything stays in your browser.
+clean course player with progress tracking. Reading needs no account. Everything works in your browser. If you
+create a free account, your courses (up to 2 at a time) and progress are saved, so you never re-upload and you can
+continue on any device.
 
 ![Lecture video with its notes attached](docs/screenshots/lecture-with-notes.png)
 
@@ -24,6 +26,8 @@ clean course player with progress tracking. Everything stays in your browser.
 - **Learning flow:** sidebar with progress, "Continue where you left off", mark complete,
   study time (counted only while the tab is visible), `j`/`k`/`m`/`/` shortcuts, dark mode, mobile drawer.
 - **Re-analyze** a course or **re-import a newer version** without losing progress.
+- **Optional accounts** (email or username + password): courses saved to S3 through presigned URLs, progress
+  synced across devices, and 2 courses per account (delete a finished one to add another). See [server/](server/README.md).
 
 | Units and sessions (MIT 18.06SC) | In-class questions (MIT 6.0001) |
 | --- | --- |
@@ -42,13 +46,23 @@ npm run dev     # open http://localhost:3000 and drop a course zip
 Requires Node 20+. To get an MIT course, open it on [ocw.mit.edu](https://ocw.mit.edu) and choose
 **Download course**.
 
+## Accounts & backend (optional)
+
+```bash
+cd server && cp .env.example .env && npm install && npm run dev   # API on :4000 (local disk storage)
+```
+
+The web app talks to `NEXT_PUBLIC_API_URL` (default `http://localhost:4000`). Deploying it with S3 and
+Supabase on Render and Vercel is covered step by step in [docs/DEPLOY.md](docs/DEPLOY.md).
+
 ## Scripts
 
 | Command | What it does |
 | --- | --- |
 | `npm run dev` / `npm run build && npm start` | Run the app |
 | `npm test` | Unit tests for the analyzers (Vitest, real OCW metadata fixtures) |
-| `npm run test:e2e` | End-to-end tests (Playwright). Add `PW_CHANNEL=chrome` to use an installed Chrome |
+| `npm run test:e2e` | End-to-end tests (Playwright) incl. accounts; starts a test API + Postgres in Docker. `PW_CHANNEL=chrome` uses an installed Chrome |
+| `cd server && npm test` | API tests against a real Postgres 17 (Docker) |
 | `npm run analyze -- course.zip` | Print the structure CourseBox detects for a zip or folder |
 
 ## How it works
@@ -74,7 +88,6 @@ visitor's own browser, so a deployed copy is still private to whoever uses it.
 
 ## Roadmap
 
-- Cloud sync across devices (Supabase / Cloudflare R2), optional
 - Notes and highlights pinned to PDF pages, with markdown export
 - Study heatmap, streaks and weekly goals
 - "Ask about this lesson" with an LLM

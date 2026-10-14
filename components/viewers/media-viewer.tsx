@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { db } from "@/lib/db";
+import { getFile } from "@/lib/files";
 import { cn } from "@/lib/utils";
 
 const SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2];
@@ -18,9 +18,9 @@ function useCaptionTracks(courseId: string, paths: string[]) {
     (async () => {
       const out: { src: string; label: string; lang: string }[] = [];
       for (const p of paths) {
-        const f = await db.files.get([courseId, p]);
-        if (!f) continue;
-        let text = await f.blob.text();
+        const blob = await getFile(courseId, p);
+        if (!blob) continue;
+        let text = await blob.text();
         if (p.toLowerCase().endsWith(".srt") || !text.startsWith("WEBVTT")) text = srtToVtt(text);
         const src = URL.createObjectURL(new Blob([text], { type: "text/vtt" }));
         urls.push(src);
