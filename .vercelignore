@@ -1,0 +1,11 @@
+# The web app only. Never upload the API (it holds server/.env secrets) or test assets.
+server
+e2e
+tests
+docs
+scripts/analyze.mts
+.env*
+!.env.example
+test-results
+playwright-report
+.storage

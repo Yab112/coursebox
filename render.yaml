@@ -22,19 +22,19 @@ services:
       - key: RUN_MIGRATIONS
         value: "true"
       - key: CORS_ORIGINS
-        sync: false # e.g. https://coursebox.vercel.app,http://localhost:3000
+        value: https://coursebox-five.vercel.app,http://localhost:3000
       - key: STORAGE_DRIVER
         value: s3
       - key: S3_BUCKET
-        sync: false
+        value: courseview4
       - key: AWS_REGION
-        value: eu-west-1
+        value: eu-north-1
       - key: AWS_ACCESS_KEY_ID
         sync: false
       - key: AWS_SECRET_ACCESS_KEY
         sync: false
       - key: PUBLIC_API_URL
-        sync: false # e.g. https://coursebox-api.onrender.com
+        value: https://coursebox-api.onrender.com
       - key: SIGNING_SECRET
         generateValue: true
       - key: COURSE_LIMIT
