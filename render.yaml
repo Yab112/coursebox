@@ -1,4 +1,6 @@
-# Render Blueprint: the CourseBox API (server/). Secrets are entered in the Render dashboard (sync: false).
+# Render Blueprint: the CourseBox API (server/).
+# Every deployment-specific value (database, bucket, keys, URLs) is entered in the Render dashboard (sync: false);
+# nothing about a particular deployment is committed here.
 services:
   - type: web
     name: coursebox-api
@@ -22,19 +24,19 @@ services:
       - key: RUN_MIGRATIONS
         value: "true"
       - key: CORS_ORIGINS
-        value: https://coursebox-five.vercel.app,http://localhost:3000
+        sync: false # your web app URL(s), comma separated
       - key: STORAGE_DRIVER
         value: s3
       - key: S3_BUCKET
-        value: courseview4
+        sync: false
       - key: AWS_REGION
-        value: eu-north-1
+        sync: false
       - key: AWS_ACCESS_KEY_ID
         sync: false
       - key: AWS_SECRET_ACCESS_KEY
         sync: false
       - key: PUBLIC_API_URL
-        value: https://coursebox-api.onrender.com
+        sync: false # this service's public URL
       - key: SIGNING_SECRET
         generateValue: true
       - key: COURSE_LIMIT
