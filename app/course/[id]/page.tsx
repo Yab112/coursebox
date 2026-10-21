@@ -142,7 +142,7 @@ function CoursePlayer() {
         <div>
           <p className="text-lg font-semibold">Course not found</p>
           <p className="mt-1 text-muted">It may have been removed from this browser.</p>
-          <Link href="/" className="mt-4 inline-block font-medium text-primary hover:underline">
+          <Link href="/library" className="mt-4 inline-block font-medium text-primary hover:underline">
             Back to library
           </Link>
         </div>
@@ -159,7 +159,7 @@ function CoursePlayer() {
         <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setDrawer(true)} aria-label="Open course menu">
           <Menu />
         </Button>
-        <Link href="/" className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-muted hover:bg-surface-2 hover:text-foreground">
+        <Link href="/library" className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-muted hover:bg-surface-2 hover:text-foreground">
           <ArrowLeft className="size-4" /> <span className="hidden sm:inline">Library</span>
         </Link>
         <div className="mx-1 hidden h-6 w-px bg-border sm:block" />

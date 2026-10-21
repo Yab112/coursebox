@@ -2,7 +2,7 @@ import { expect, test } from "./test";
 import { importCourse } from "./helpers";
 
 test("empty library invites a drop, then shows the imported course card", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/library");
   await expect(page.getByRole("heading", { name: "My learning" })).toBeVisible();
   await expect(page.getByText("Add a course")).toBeVisible();
 
@@ -18,7 +18,7 @@ test("empty library invites a drop, then shows the imported course card", async 
 
 test("a course can be removed from the library", async ({ page }) => {
   await importCourse(page, "ocw-18657.zip");
-  await page.goto("/");
+  await page.goto("/library");
   const card = page.locator(".group", { hasText: "Mathematics of Machine Learning" }).first();
   await card.hover();
   await card.getByRole("button", { name: "Course options" }).click();

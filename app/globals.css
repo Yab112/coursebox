@@ -137,3 +137,48 @@ body {
 .course-html label:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
 .course-html details.mc-solution { margin: 0.5rem 0 2rem; }
 .course-html details.mc-solution > summary { cursor: pointer; color: var(--primary); font-weight: 500; font-size: 0.9rem; }
+
+/* Landing page */
+.landing-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 25%, transparent 75%);
+  opacity: 0.9;
+}
+.landing-glow {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 28%, transparent), transparent);
+  filter: blur(20px);
+}
+.landing-cta-glow {
+  background:
+    radial-gradient(600px circle at 15% 0%, rgba(129, 140, 248, 0.35), transparent 60%),
+    radial-gradient(500px circle at 90% 100%, rgba(217, 70, 239, 0.25), transparent 60%);
+}
+.landing-gradient-text {
+  background: linear-gradient(100deg, var(--primary) 10%, #c026d3 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dark .landing-gradient-text {
+  background-image: linear-gradient(100deg, var(--primary) 10%, #e879f9 90%);
+}
+.landing-rise { animation: landing-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.landing-fade { animation: landing-fade 0.35s ease-out both; }
+@keyframes landing-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes landing-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-rise, .landing-fade { animation: none; }
+}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
