@@ -82,6 +82,8 @@ zip ──► Web Worker (JSZip) ──► IndexedDB files ──► analyzers �
 - `lib/xray.ts` + `lib/xray.worker.ts`: the landing page's X-ray. It runs the real analyzers on a dropped zip
   in a worker, without storing anything, and shows where every file goes. The sample in `public/samples/` is
   built from the 6.006 fixture by `npx tsx scripts/build-xray-sample.mts` (re-run it after analyzer changes).
+- `/status` (`components/status/`) reads the API's public `GET /status`: live database, storage and email checks,
+  response-time history, region and commit, plus the roadmap from `lib/features.ts`.
 - `lib/features.ts`: the feature registry the landing page renders. Upcoming features (catalog, AI recaps,
   short notes, quizzes, highlights) are marked `soon` and listed under "Next term"; flip one to `live` when it
   ships and it moves into the syllabus list.

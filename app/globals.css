@@ -227,3 +227,7 @@ html { scroll-behavior: smooth; }
 .nb-html th, .nb-html td { border: 1px solid var(--border); padding: 0.3rem 0.6rem; text-align: right; }
 .nb-html thead th, .nb-html tbody th { background: var(--surface-2); font-weight: 600; }
 .nb-html tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--surface-2) 40%, transparent); }
+
+/* Status page: outage colour and the chart's categorical series (validated slots 1-3). */
+:root { --danger: #dc2626; --danger-soft: #fdecec; --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; }
+.dark { --danger: #f87171; --danger-soft: #2a1515; --s1: #3987e5; --s2: #d95926; --s3: #199e70; }

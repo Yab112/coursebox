@@ -2,7 +2,7 @@
  * Product feature registry. The landing page renders from this list, so shipping a feature
  * means flipping its `status` to "live" (and optionally giving it an `href`).
  */
-export type FeatureStatus = "live" | "beta" | "soon";
+export type FeatureStatus = "live" | "building" | "beta" | "soon";
 
 export type Feature = {
   id: string;
@@ -11,6 +11,10 @@ export type Feature = {
   status: FeatureStatus;
   /** Where the feature lives in the app, once it exists. */
   href?: string;
+  /** When it went live (shown as "Recently shipped" on the status page). */
+  shipped?: string;
+  /** false keeps a live feature off the landing page's syllabus (e.g. account plumbing). */
+  landing?: boolean;
 };
 
 export const FEATURES: Feature[] = [
@@ -57,6 +61,28 @@ export const FEATURES: Feature[] = [
     status: "live",
   },
   {
+    id: "viewers",
+    title: "Every file, read properly",
+    description:
+      "Markdown with math and diagrams, Jupyter notebooks with their outputs, highlighted code in 200 languages, CSV tables, JSON trees and subtitle transcripts.",
+    status: "live",
+    shipped: "2026-10-21",
+  },
+  {
+    id: "password-reset",
+    title: "Password reset by email",
+    description: "Forgot your password? Get a 6-digit code by email and you're back in, with other devices signed out.",
+    status: "live",
+    shipped: "2026-10-21",
+    landing: false,
+  },
+  {
+    id: "editor",
+    title: "Edit code and run Python",
+    description: "Edit your own copy of any code file, and run Python files and notebook cells right in your browser.",
+    status: "building",
+  },
+  {
     id: "catalog",
     title: "Course catalog",
     description: "Browse ready-to-study open courses and add them to your library in one click, no zip needed.",
@@ -81,6 +107,12 @@ export const FEATURES: Feature[] = [
     status: "soon",
   },
   {
+    id: "byo-storage",
+    title: "Bring your own storage",
+    description: "Keep your saved courses in your own S3, Cloudflare R2 or Backblaze bucket, with no course limit.",
+    status: "soon",
+  },
+  {
     id: "highlights",
     title: "Notes & highlights",
     description: "Pin notes to a PDF page or video timestamp and keep every highlight searchable in one place.",
@@ -89,3 +121,5 @@ export const FEATURES: Feature[] = [
 ];
 
 export const featuresBy = (status: FeatureStatus) => FEATURES.filter((f) => f.status === status);
+
+export const STATUS_LABEL: Record<FeatureStatus, string> = { live: "Shipped", building: "In progress", beta: "Beta", soon: "Planned" };
