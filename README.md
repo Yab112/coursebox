@@ -40,7 +40,7 @@ continue on any device.
 ```bash
 git clone https://github.com/Yab112/coursebox && cd coursebox
 npm install
-npm run dev     # open http://localhost:3000 and drop a course zip
+npm run dev     # open http://localhost:3000 (landing page) or /library, and drop a course zip
 ```
 
 Requires Node 20+. To get an MIT course, open it on [ocw.mit.edu](https://ocw.mit.edu) and choose
@@ -78,6 +78,10 @@ zip ──► Web Worker (JSZip) ──► IndexedDB files ──► analyzers �
 - `lib/db.ts`: Dexie tables for courses, files, progress, last-opened state and daily study time.
   Progress is keyed by file **path**, so re-analysis and updates keep it.
 - `components/viewers/`: one viewer per file type.
+- `app/page.tsx` + `components/landing/`: the landing page. The library lives at `/library`.
+- `lib/features.ts`: the feature registry the landing page renders. Upcoming features (catalog, AI recaps,
+  short notes, quizzes, highlights) are marked `soon`; flip one to `live` when it ships and it moves to the
+  features grid.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to teach CourseBox a new course layout.
 

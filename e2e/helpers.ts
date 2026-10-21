@@ -6,7 +6,7 @@ export const zip = (name: string) => path.join(OUT, name);
 
 /** Drop a zip on the library page and wait for the course page. */
 export async function importCourse(page: Page, file: string, opts: { keepPrompt?: boolean } = {}) {
-  await page.goto("/");
+  await page.goto("/library");
   await page.locator('input[type="file"]').setInputFiles(zip(file));
   await page.waitForURL(/\/course\//, { timeout: 45_000 });
   await expect(page.locator("aside").first()).toBeVisible();

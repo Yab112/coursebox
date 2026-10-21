@@ -65,7 +65,7 @@ test.describe("MIT OCW course (18.657)", () => {
     await page.getByRole("button", { name: "Mark complete", exact: true }).click();
     await expect(sidebar(page).getByText("1 of 6 lessons complete")).toBeVisible();
 
-    await page.goto("/");
+    await page.goto("/library");
     await page.locator('input[type="file"]').setInputFiles(zip("ocw-18657.zip"));
     await expect(page.getByText("You already have this course")).toBeVisible();
     await page.getByRole("button", { name: "Update existing" }).click();

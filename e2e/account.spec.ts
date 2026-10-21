@@ -20,7 +20,7 @@ async function fillSignup(page: Page, c: ReturnType<typeof credentials>) {
 
 async function signUpFromHeader(page: Page) {
   const c = credentials();
-  await page.goto("/");
+  await page.goto("/library");
   await page.getByRole("button", { name: "Create account" }).click();
   await fillSignup(page, c);
   await expect(page.getByRole("button", { name: "Account menu" })).toBeVisible();
@@ -28,7 +28,7 @@ async function signUpFromHeader(page: Page) {
 }
 
 async function signIn(page: Page, identifier: string, password: string) {
-  await page.goto("/");
+  await page.goto("/library");
   await page.getByRole("button", { name: "Sign in" }).click();
   const dlg = page.getByRole("dialog", { name: "Sign in" });
   await dlg.getByLabel("Email or username").fill(identifier);
@@ -40,7 +40,7 @@ async function signIn(page: Page, identifier: string, password: string) {
 const card = (page: Page, title: string) => page.locator(".group", { hasText: title }).first();
 
 async function expectSaved(page: Page, title: string) {
-  await page.goto("/");
+  await page.goto("/library");
   await expect(card(page, title).getByText("Saved to your account")).toBeVisible({ timeout: 30_000 });
 }
 
@@ -106,7 +106,7 @@ test("an account holds 2 courses; deleting a finished one frees the slot", async
   await expectSaved(page, "Python Crash Course");
 
   await importCourse(page, "ocw-60001.zip");
-  await page.goto("/");
+  await page.goto("/library");
   const third = card(page, "Introduction to Computer Science");
   await expect(third.getByText(/Not saved: Your account can hold 2 courses/)).toBeVisible({ timeout: 20_000 });
 
