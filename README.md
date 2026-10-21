@@ -82,6 +82,10 @@ zip ──► Web Worker (JSZip) ──► IndexedDB files ──► analyzers �
 - `lib/xray.ts` + `lib/xray.worker.ts`: the landing page's X-ray. It runs the real analyzers on a dropped zip
   in a worker, without storing anything, and shows where every file goes. The sample in `public/samples/` is
   built from the 6.006 fixture by `npx tsx scripts/build-xray-sample.mts` (re-run it after analyzer changes).
+- Code files and notebooks can be edited (your copy, in IndexedDB `edits`; originals untouched) and Python runs in the
+  browser: `public/python-worker.mjs` (a module worker, as Pyodide requires) + `lib/python.ts`. The Pyodide runtime is
+  copied to `public/pyodide` on install; packages like numpy load from Pyodide's CDN on first import
+  (`NEXT_PUBLIC_PYODIDE_PACKAGES` overrides it).
 - `/status` (`components/status/`) reads the API's public `GET /status`: live database, storage and email checks,
   response-time history, region and commit, plus the roadmap from `lib/features.ts`.
 - `lib/features.ts`: the feature registry the landing page renders. Upcoming features (catalog, AI recaps,

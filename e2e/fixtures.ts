@@ -101,6 +101,7 @@ async function viewersZip(out: string) {
   lab.file("01 - lab.ipynb", JSON.stringify(notebook));
   lab.file("02 - scores.csv", "student,score\nada,91.5\nbob,78\ncarol,88\n");
   lab.file("03 - config.json", JSON.stringify({ model: "linear", layers: [{ units: 64 }], seed: null }));
+  lab.file("05 - mean.py", "import csv\n\nrows = list(csv.DictReader(open('02 - scores.csv')))\nprint('mean', sum(float(r['score']) for r in rows) / len(rows))\n");
   lab.file("04 - lecture.srt", "1\n00:00:01,000 --> 00:00:03,000\nWelcome to the lab.\n\n2\n00:01:05,000 --> 00:01:07,000\nNow plot the loss.\n");
   const tools = root.folder("02 - Tools")!;
   tools.file("Makefile", "run:\n\tpython train\n");

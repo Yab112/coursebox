@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { dirname } from "@/lib/analyzers/utils";
 import { getFile } from "@/lib/files";
 import { detectFile, looksBinary, type Detected } from "@/lib/filetype";
+import { CodeFile } from "./code-file";
 import { CodeView } from "./code-view";
 import { TextSkeleton } from "./skeleton";
 import { JsonView, SubtitlesView, TableView } from "./data-views";
@@ -79,7 +80,7 @@ export function TextContent({
     case "markdown":
       return <MarkdownDocument text={text} courseId={courseId} path={path} onPath={onPath} />;
     case "notebook":
-      return <NotebookView text={text} courseId={courseId} baseDir={dirname(path)} />;
+      return <NotebookView text={text} courseId={courseId} path={path} baseDir={dirname(path)} />;
     case "json":
       return <JsonView text={text} truncated={truncated} />;
     case "table":
@@ -89,9 +90,9 @@ export function TextContent({
     case "html":
       return renderHtml ? renderHtml() : <CodeView code={text} lang="html" truncated={truncated} />;
     case "code":
-      return <CodeView code={text} lang={detected.lang} truncated={truncated} />;
+      return courseId ? <CodeFile code={text} lang={detected.lang} path={path} courseId={courseId} truncated={truncated} /> : <CodeView code={text} lang={detected.lang} truncated={truncated} />;
     default:
-      return <CodeView code={text} truncated={truncated} />;
+      return courseId ? <CodeFile code={text} path={path} courseId={courseId} truncated={truncated} /> : <CodeView code={text} truncated={truncated} />;
   }
 }
 

@@ -48,3 +48,40 @@ test.describe("smart file viewers", () => {
     await expect(page.getByText("print('training')")).toBeVisible();
   });
 });
+
+test.describe("edit and run code", () => {
+  test.beforeEach(async ({ page }) => {
+    await importCourse(page, "data-science-lab.zip");
+  });
+
+  test("a Python file runs in the browser and reads files next to it; edits are saved as your copy", async ({ page }) => {
+    await openLesson(page, "Mean");
+    await page.getByRole("button", { name: "Run", exact: true }).click();
+    await expect(page.getByText("mean 85.83333333333333")).toBeVisible({ timeout: 60_000 });
+
+    await page.getByRole("button", { name: "Edit a copy" }).click();
+    await page.locator(".cm-content").click();
+    await page.keyboard.press("Control+End");
+    await page.keyboard.type("\nprint('mine')");
+    await expect(page.getByText("Saved on this device")).toBeVisible();
+    await page.keyboard.press("Shift+Enter");
+    await expect(page.locator("pre", { hasText: "mine" })).toBeVisible();
+    await page.getByRole("button", { name: "Done", exact: true }).click();
+
+    await page.reload();
+    await openLesson(page, "Mean");
+    await expect(page.getByText("print('mine')")).toBeVisible();
+    await page.getByRole("button", { name: "Original" }).click();
+    await expect(page.getByText("print('mine')")).toHaveCount(0);
+  });
+
+  test("notebook cells run in one session, like Jupyter", async ({ page }) => {
+    await openLesson(page, "Lab");
+    await page.getByRole("button", { name: "Run all" }).click();
+    // Cell 2 uses `df`, which the notebook never defines: Run all stops there with a clean traceback.
+    // (The first run includes loading Python, hence the longer wait.)
+    await expect(page.getByText("NameError: name 'df' is not defined")).toBeVisible({ timeout: 60_000 });
+    await expect(page.locator("pre", { hasText: "hello notebook" })).toBeVisible();
+    await expect(page.getByText("In [2]:")).toBeVisible();
+  });
+});

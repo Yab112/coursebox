@@ -80,7 +80,8 @@ export const FEATURES: Feature[] = [
     id: "editor",
     title: "Edit code and run Python",
     description: "Edit your own copy of any code file, and run Python files and notebook cells right in your browser.",
-    status: "building",
+    status: "live",
+    shipped: "2026-10-21",
   },
   {
     id: "catalog",
