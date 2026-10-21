@@ -2,83 +2,76 @@
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { BrowserFrame, Section, SectionHeading } from "./primitives";
+import { Section } from "./primitives";
 
-const SHOTS = [
+const FIGURES = [
   {
-    id: "course",
-    label: "Course overview",
-    caption: "Course header, description, what's included and your progress, built from the course's own metadata.",
+    id: "2a",
+    label: "The course page",
+    caption: "Title, instructors, term and what's inside, read from the course's own metadata. MIT 18.06SC, Linear Algebra.",
     src: "/screenshots/course-home.png",
-    url: "coursebox.app/course/linear-algebra",
   },
   {
-    id: "lecture",
-    label: "Lecture + notes",
-    caption: "Lecture videos with their notes attached. PDFs open on the page you left off.",
+    id: "2b",
+    label: "A lecture with its notes",
+    caption: "The lecture video and its PDF notes side by side as one lesson. The PDF reopens on the page you left.",
     src: "/screenshots/lecture-with-notes.png",
-    url: "coursebox.app/course/introduction-to-algorithms",
   },
   {
-    id: "units",
-    label: "Units & sessions",
-    caption: "Big courses like MIT 18.06SC are grouped into units and sessions, just like the original.",
+    id: "2c",
+    label: "Units and sessions",
+    caption: "Large courses keep the shape the instructors gave them: units, then sessions, then lessons.",
     src: "/screenshots/units-sessions.png",
-    url: "coursebox.app/course/linear-algebra",
   },
   {
-    id: "questions",
+    id: "2d",
     label: "In-class questions",
-    caption: "Multiple-choice questions from the course stay interactive, with instant right or wrong feedback.",
+    caption: "Multiple-choice questions from the original course still work, with right and wrong feedback. MIT 6.0001.",
     src: "/screenshots/in-class-questions.png",
-    url: "coursebox.app/course/intro-to-python",
   },
   {
-    id: "files",
-    label: "Every file accounted for",
-    caption: "The All files tab shows where every file in the zip went. Nothing gets silently dropped.",
+    id: "2e",
+    label: "Where every file went",
+    caption: "The All files tab lists each file in the zip and where it ended up, so you can check nothing was lost.",
     src: "/screenshots/all-files.png",
-    url: "coursebox.app/course/linear-algebra",
   },
 ];
 
 export function Showcase() {
-  const [active, setActive] = useState(SHOTS[0].id);
-  const shot = SHOTS.find((s) => s.id === active) ?? SHOTS[0];
+  const [active, setActive] = useState(FIGURES[0].id);
+  const fig = FIGURES.find((f) => f.id === active) ?? FIGURES[0];
 
   return (
-    <Section id="tour" className="bg-surface">
-      <SectionHeading
-        eyebrow="Take a look"
-        title="Feels like Coursera. Runs on your files."
-        description="Every screen below is CourseBox running on a real MIT OpenCourseWare download."
-      />
-      <div role="tablist" aria-label="Product screenshots" className="scrollbar-thin -mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0">
-        {SHOTS.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            role="tab"
-            id={`tab-${s.id}`}
-            aria-selected={s.id === active}
-            aria-controls="tour-panel"
-            onClick={() => setActive(s.id)}
-            className={cn(
-              "shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
-              s.id === active
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-background text-muted hover:border-primary/40 hover:text-foreground",
-            )}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
-      <div id="tour-panel" role="tabpanel" aria-labelledby={`tab-${shot.id}`} className="mx-auto max-w-5xl">
-        <BrowserFrame url={shot.url}>
-          <Image key={shot.id} src={shot.src} alt={shot.caption} width={1440} height={900} className="landing-fade h-auto w-full" />
-        </BrowserFrame>
-        <p className="mx-auto mt-6 max-w-xl text-center text-muted">{shot.caption}</p>
+    <Section id="figures" mark="02" label="Figures" title="What it looks like with a real course in it.">
+      <div className="grid gap-8 lg:grid-cols-9 lg:gap-6">
+        <div role="tablist" aria-label="Screenshots" aria-orientation="vertical" className="-mx-4 flex gap-1 overflow-x-auto px-4 lg:col-span-3 lg:mx-0 lg:flex-col lg:px-0">
+          {FIGURES.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              role="tab"
+              id={`fig-${f.id}`}
+              aria-selected={f.id === active}
+              aria-controls="fig-panel"
+              onClick={() => setActive(f.id)}
+              className={cn(
+                "flex shrink-0 items-baseline gap-3 border-b-2 py-2 pr-3 text-left text-[15px] transition-colors lg:border-b-0 lg:border-l-2 lg:pl-4",
+                f.id === active ? "border-ink text-ink" : "border-transparent text-ink-3 hover:text-ink",
+              )}
+            >
+              <span className="font-code text-[11px]">{f.id}</span>
+              {f.label}
+            </button>
+          ))}
+        </div>
+        <figure id="fig-panel" role="tabpanel" aria-labelledby={`fig-${fig.id}`} className="lg:col-span-6">
+          <div className="border border-ink bg-panel p-2 sm:p-3">
+            <Image key={fig.id} src={fig.src} alt={fig.caption} width={1440} height={900} className="landing-fade h-auto w-full border border-rule" />
+          </div>
+          <figcaption className="mt-3 text-[13px] text-ink-3">
+            <span className="font-code">Fig. {fig.id}</span>: {fig.caption}
+          </figcaption>
+        </figure>
       </div>
     </Section>
   );

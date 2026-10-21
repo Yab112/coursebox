@@ -80,8 +80,8 @@ zip ──► Web Worker (JSZip) ──► IndexedDB files ──► analyzers �
 - `components/viewers/`: one viewer per file type.
 - `app/page.tsx` + `components/landing/`: the landing page. The library lives at `/library`.
 - `lib/features.ts`: the feature registry the landing page renders. Upcoming features (catalog, AI recaps,
-  short notes, quizzes, highlights) are marked `soon`; flip one to `live` when it ships and it moves to the
-  features grid.
+  short notes, quizzes, highlights) are marked `soon` and listed under "Next term"; flip one to `live` when it
+  ships and it moves into the syllabus list.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to teach CourseBox a new course layout.
 

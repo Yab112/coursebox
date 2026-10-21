@@ -66,6 +66,15 @@
   --color-viewer: var(--viewer);
   --shadow-card: var(--shadow);
   --shadow-pop: var(--shadow-lg);
+  --color-paper: var(--paper);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-marker: var(--marker);
+  --font-display: var(--font-instrument), Georgia, serif;
+  --font-code: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -138,45 +147,53 @@ body {
 .course-html details.mc-solution { margin: 0.5rem 0 2rem; }
 .course-html details.mc-solution > summary { cursor: pointer; color: var(--primary); font-weight: 500; font-size: 0.9rem; }
 
-/* Landing page */
-.landing-grid {
-  background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 25%, transparent 75%);
-  opacity: 0.9;
+/* Landing page: its own paper-and-ink palette, scoped to .landing */
+.landing {
+  --paper: #f4f1e8;
+  --panel: #ebe7da;
+  --ink: #191813;
+  --ink-2: #4f4c43;
+  --ink-3: #85816f;
+  --rule: #d6d0bf;
+  --marker: #fde27a;
+  color-scheme: light;
 }
-.landing-glow {
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 28%, transparent), transparent);
-  filter: blur(20px);
+.dark .landing {
+  --paper: #13120e;
+  --panel: #1b1a15;
+  --ink: #ede8da;
+  --ink-2: #b1ab9b;
+  --ink-3: #78735f;
+  --rule: #2f2d25;
+  --marker: #6b5a12;
+  color-scheme: dark;
 }
-.landing-cta-glow {
-  background:
-    radial-gradient(600px circle at 15% 0%, rgba(129, 140, 248, 0.35), transparent 60%),
-    radial-gradient(500px circle at 90% 100%, rgba(217, 70, 239, 0.25), transparent 60%);
+.landing ::selection { background: var(--marker); color: var(--ink); }
+.landing *:focus-visible { outline-color: var(--ink); }
+.landing em { font-style: italic; }
+.landing-marker {
+  color: inherit;
+  background: linear-gradient(transparent 12%, var(--marker) 12%, var(--marker) 88%, transparent 88%);
+  padding: 0 0.12em;
+  margin: 0 -0.04em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
-.landing-gradient-text {
-  background: linear-gradient(100deg, var(--primary) 10%, #c026d3 90%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.landing-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--ink-3);
+  transition: text-decoration-color 0.15s;
 }
-.dark .landing-gradient-text {
-  background-image: linear-gradient(100deg, var(--primary) 10%, #e879f9 90%);
-}
-.landing-rise { animation: landing-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.landing-fade { animation: landing-fade 0.35s ease-out both; }
-@keyframes landing-rise {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: none; }
-}
+.landing-link:hover { text-decoration-color: var(--ink); }
+.landing-fade { animation: landing-fade 0.3s ease-out both; }
 @keyframes landing-fade {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .landing-rise, .landing-fade { animation: none; }
+  .landing-fade { animation: none; }
 }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
