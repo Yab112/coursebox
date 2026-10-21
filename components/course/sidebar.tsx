@@ -4,7 +4,7 @@ import { forwardRef, useEffect, useMemo, useState } from "react";
 import type { CourseManifest } from "@/lib/analyzers/types";
 import type { ProgressRecord } from "@/lib/db";
 import { cn, formatDuration } from "@/lib/utils";
-import { FileIcon, TYPE_LABEL } from "../file-icon";
+import { fileKind, KindIcon } from "../file-icon";
 import { Progress } from "../ui/progress";
 import { lessonStatus, sectionStatus, StatusBadge } from "./status";
 
@@ -144,8 +144,8 @@ export const CourseSidebar = forwardRef<
                           <button onClick={() => onSelect(l.id)} className="min-w-0 flex-1 text-left">
                             <p className={cn("text-sm leading-snug", active ? "font-medium text-foreground" : "text-foreground/90")}>{l.title}</p>
                             <p className="mt-1 flex items-center gap-1.5 text-xs text-muted">
-                              <FileIcon type={l.type} className="size-3.5" />
-                              {l.path.startsWith("youtube:") ? "YouTube" : TYPE_LABEL[l.type]}
+                              <KindIcon path={l.path} type={l.type} className="size-3.5" />
+                              {l.path.startsWith("youtube:") ? "YouTube" : fileKind(l.path, l.type).label}
                               {status === "started" && <StatusBadge status={status} />}
                               {!!l.solution && <span className="rounded bg-warning-soft px-1.5 text-[10px] font-medium text-warning">+ solution</span>}
                               {!!l.attachments?.length && (
