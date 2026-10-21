@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { DemoPlayer } from "@/components/landing/demo-player";
 import { Hero } from "@/components/landing/hero";
 import { LandingImporter } from "@/components/landing/importer";
 import { Closing, Colophon, LocalFirst, NextTerm, OfficeHours, Steps, Syllabus } from "@/components/landing/sections";
-import { Showcase } from "@/components/landing/showcase";
 import { SiteNav } from "@/components/landing/site-nav";
 
 const serif = Instrument_Serif({ variable: "--font-instrument", weight: "400", style: ["normal", "italic"], subsets: ["latin"] });
@@ -29,7 +29,7 @@ export default function LandingPage() {
           <Hero />
           <Steps />
           <Syllabus />
-          <Showcase />
+          <DemoPlayer />
           <LocalFirst />
           <NextTerm />
           <OfficeHours />

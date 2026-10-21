@@ -9,7 +9,7 @@ import { GITHUB_URL } from "./primitives";
 
 const LINKS = [
   { href: "#syllabus", label: "Syllabus" },
-  { href: "#figures", label: "Figures" },
+  { href: "#try", label: "Try it" },
   { href: "#next-term", label: "Next term" },
   { href: "#office-hours", label: "Office hours" },
 ];

@@ -187,14 +187,6 @@ body {
   transition: text-decoration-color 0.15s;
 }
 .landing-link:hover { text-decoration-color: var(--ink); }
-.landing-fade { animation: landing-fade 0.3s ease-out both; }
-@keyframes landing-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .landing-fade { animation: none; }
-}
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
