@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, JetBrains_Mono } from "next/font/google";
-import { DemoPlayer } from "@/components/landing/demo-player";
 import { Hero } from "@/components/landing/hero";
 import { LandingImporter } from "@/components/landing/importer";
 import { Closing, Colophon, LocalFirst, NextTerm, OfficeHours, Steps, Syllabus } from "@/components/landing/sections";
@@ -29,7 +28,6 @@ export default function LandingPage() {
           <Hero />
           <Steps />
           <Syllabus />
-          <DemoPlayer />
           <LocalFirst />
           <NextTerm />
           <OfficeHours />

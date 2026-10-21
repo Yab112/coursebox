@@ -6,9 +6,20 @@ import { ImportPanel } from "@/components/library/import-panel";
 import { useImporter } from "@/hooks/use-importer";
 import { cn } from "@/lib/utils";
 
-const PickContext = createContext<() => void>(() => {});
+type Landing = {
+  /** Opens the file picker. */
+  pick: () => void;
+  /** The zip being X-rayed (picked, or dropped anywhere on the page). */
+  file: File | null;
+  /** Imports the zip for real and opens the course. */
+  open: (file: File) => void;
+};
+const LandingContext = createContext<Landing>({ pick: () => {}, file: null, open: () => {} });
+export const useLanding = () => useContext(LandingContext);
 
-/** One importer for the whole landing page: any upload button opens it, and a zip can be dropped anywhere. */
+export const XRAY_ID = "xray";
+
+/** Every zip on the landing page goes through the X-ray first; importing is one click from there. */
 export function LandingImporter({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { status, saveCourse } = useAuth();
@@ -17,7 +28,13 @@ export function LandingImporter({ children }: { children: React.ReactNode }) {
     router.push(`/course/${id}`);
   });
   const input = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
+
+  const xray = (f: File) => {
+    setFile(f);
+    document.getElementById(XRAY_ID)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
 
   useEffect(() => {
     let depth = 0;
@@ -36,7 +53,7 @@ export function LandingImporter({ children }: { children: React.ReactNode }) {
       depth = 0;
       setDragging(false);
       const f = e.dataTransfer?.files?.[0];
-      if (f) importer.start(f);
+      if (f) xray(f);
     };
     window.addEventListener("dragenter", enter);
     window.addEventListener("dragleave", leave);
@@ -48,10 +65,10 @@ export function LandingImporter({ children }: { children: React.ReactNode }) {
       window.removeEventListener("dragover", over);
       window.removeEventListener("drop", drop);
     };
-  }, [importer.start]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <PickContext.Provider value={() => input.current?.click()}>
+    <LandingContext.Provider value={{ pick: () => input.current?.click(), file, open: importer.start }}>
       {children}
       <input
         ref={input}
@@ -60,22 +77,22 @@ export function LandingImporter({ children }: { children: React.ReactNode }) {
         hidden
         onChange={(e) => {
           const f = e.target.files?.[0];
-          if (f) importer.start(f);
+          if (f) xray(f);
           e.target.value = "";
         }}
       />
       {dragging && importer.state.phase === "idle" && (
         <div className="pointer-events-none fixed inset-4 z-50 grid place-items-center border-2 border-dashed border-ink bg-paper/90">
-          <p className="font-display text-5xl italic">Drop it. We&apos;ll take it from here.</p>
+          <p className="px-6 text-center font-display text-5xl italic">Drop it. We&apos;ll X-ray it first.</p>
         </div>
       )}
       <ImportPanel state={importer.state} onCancel={importer.cancel} onUpdate={importer.updateExisting} onNew={importer.importAsNew} />
-    </PickContext.Provider>
+    </LandingContext.Provider>
   );
 }
 
-export function UploadButton({ className, children = "Upload a course .zip" }: { className?: string; children?: React.ReactNode }) {
-  const pick = useContext(PickContext);
+export function UploadButton({ className, children = "X-ray a course .zip" }: { className?: string; children?: React.ReactNode }) {
+  const { pick } = useLanding();
   return (
     <button
       type="button"

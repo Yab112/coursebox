@@ -1,7 +1,7 @@
 import { UploadButton } from "./importer";
 import { Marker } from "./primitives";
 import { LibraryLink } from "./site-nav";
-import { ZipFigure } from "./zip-figure";
+import { XrayFigure } from "./xray";
 
 export function Hero() {
   return (
@@ -27,7 +27,7 @@ export function Hero() {
         </div>
 
         <div className="mt-14 sm:mt-20">
-          <ZipFigure />
+          <XrayFigure />
         </div>
       </div>
     </section>

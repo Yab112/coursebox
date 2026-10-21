@@ -187,6 +187,18 @@ body {
   transition: text-decoration-color 0.15s;
 }
 .landing-link:hover { text-decoration-color: var(--ink); }
+/* X-ray: a dark "film" panel in both themes */
+.xray-film { background: #0f0f0c; }
+.xray-in { animation: xray-in 0.45s ease-out both; }
+@keyframes xray-in {
+  from { opacity: 0; transform: translateY(4px); background-color: rgba(253, 226, 122, 0.25); }
+  to { opacity: 1; transform: none; }
+}
+.xray-blink { animation: xray-blink 1s steps(2) infinite; }
+@keyframes xray-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .xray-in, .xray-blink { animation: none; }
+}
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
