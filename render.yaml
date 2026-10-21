@@ -43,3 +43,12 @@ services:
         value: "2"
       - key: MAX_COURSE_BYTES
         value: "2147483648"
+      # Password reset emails. "log" writes codes to the service log until a provider is set up.
+      - key: MAIL_DRIVER
+        value: log
+      - key: MAIL_FROM
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false

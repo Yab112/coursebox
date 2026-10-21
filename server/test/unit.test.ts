@@ -8,7 +8,8 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { loadConfig } from "../src/config";
+import { loadConfig, parseAddress } from "../src/config";
+import { BrevoMailer, ResendMailer } from "../src/mail/Mailer";
 import { safePath } from "../src/services/courses";
 import { hashPassword, verifyPassword } from "../src/services/passwords";
 import { LocalStorage } from "../src/storage/LocalStorage";
@@ -141,5 +142,60 @@ describe("config", () => {
   });
   it("requires DATABASE_URL", () => {
     expect(() => loadConfig({})).toThrow(/DATABASE_URL/);
+  });
+});
+
+describe("mail config", () => {
+  const base = { DATABASE_URL: "postgres://x" };
+
+  it("parses sender addresses", () => {
+    expect(parseAddress("CourseBox <no-reply@example.com>")).toEqual({ name: "CourseBox", email: "no-reply@example.com" });
+    expect(parseAddress('"Course Box" <a@b.co>')).toEqual({ name: "Course Box", email: "a@b.co" });
+    expect(parseAddress("a@b.co")).toEqual({ email: "a@b.co" });
+    expect(parseAddress("not an address")).toBeNull();
+  });
+
+  it("defaults to logging and requires a key and sender for real providers", () => {
+    expect(loadConfig(base).MAIL_DRIVER).toBe("log");
+    expect(() => loadConfig({ ...base, MAIL_DRIVER: "resend" })).toThrow(/MAIL_FROM[\s\S]*RESEND_API_KEY/);
+    expect(() => loadConfig({ ...base, MAIL_DRIVER: "brevo", MAIL_FROM: "a@b.co" })).toThrow(/BREVO_API_KEY/);
+    expect(() => loadConfig({ ...base, MAIL_DRIVER: "brevo", MAIL_FROM: "nope", BREVO_API_KEY: "k" })).toThrow(/MAIL_FROM/);
+    expect(loadConfig({ ...base, MAIL_DRIVER: "resend", MAIL_FROM: "a@b.co", RESEND_API_KEY: "k" }).MAIL_DRIVER).toBe("resend");
+  });
+
+  it("calls the provider HTTP APIs with the right shape", async () => {
+    const calls: { url: string; init: RequestInit }[] = [];
+    const real = globalThis.fetch;
+    globalThis.fetch = (async (url: string, init: RequestInit) => {
+      calls.push({ url, init });
+      return new Response("{}", { status: 200 });
+    }) as typeof fetch;
+    try {
+      const email = { to: "ada@example.com", subject: "Hi", text: "t", html: "<p>h</p>" };
+      await new ResendMailer("rk", "CourseBox <no-reply@example.com>").send(email);
+      await new BrevoMailer("bk", "CourseBox <no-reply@example.com>").send(email);
+    } finally {
+      globalThis.fetch = real;
+    }
+    expect(calls[0].url).toBe("https://api.resend.com/emails");
+    expect((calls[0].init.headers as Record<string, string>).Authorization).toBe("Bearer rk");
+    expect(JSON.parse(calls[0].init.body as string)).toMatchObject({ from: "CourseBox <no-reply@example.com>", to: ["ada@example.com"] });
+    expect(calls[1].url).toBe("https://api.brevo.com/v3/smtp/email");
+    expect((calls[1].init.headers as Record<string, string>)["api-key"]).toBe("bk");
+    expect(JSON.parse(calls[1].init.body as string)).toMatchObject({
+      sender: { name: "CourseBox", email: "no-reply@example.com" },
+      to: [{ email: "ada@example.com" }],
+      htmlContent: "<p>h</p>",
+    });
+  });
+
+  it("surfaces provider errors", async () => {
+    const real = globalThis.fetch;
+    globalThis.fetch = (async () => new Response("domain not verified", { status: 403 })) as unknown as typeof fetch;
+    try {
+      await expect(new ResendMailer("k", "a@b.co").send({ to: "x@y.z", subject: "s", text: "t", html: "h" })).rejects.toThrow(/403.*domain not verified/);
+    } finally {
+      globalThis.fetch = real;
+    }
   });
 });

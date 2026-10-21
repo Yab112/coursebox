@@ -25,7 +25,7 @@ fi
 export NODE_ENV=test PORT DATABASE_URL="$DB_URL" DATABASE_SSL=false DATABASE_SCHEMA=coursebox RUN_MIGRATIONS=true \
   STORAGE_DRIVER=local LOCAL_STORAGE_DIR="$STORE" PUBLIC_API_URL="http://localhost:${PORT}" \
   SIGNING_SECRET=e2e-signing-secret-0123456789 CORS_ORIGINS="${E2E_WEB_ORIGIN:-http://localhost:3210}" COURSE_LIMIT=2 \
-  MAX_COURSE_BYTES=209715200
+  MAX_COURSE_BYTES=209715200 MAIL_DRIVER=log MAIL_LOG_FILE="${E2E_MAIL_LOG:-$STORE/mail.log}"
 # not exec: the trap must run to remove the database container
 node_modules/.bin/tsx src/index.ts &
 API_PID=$!

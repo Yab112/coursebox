@@ -1,5 +1,5 @@
 "use client";
-import { LogOut, UserRound } from "lucide-react";
+import { KeyRound, LogOut, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { formatBytes } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -63,9 +63,18 @@ export function AccountMenu({ compact }: { compact?: boolean }) {
           <button
             onClick={() => {
               setOpen(false);
-              signOut();
+              openAuth("change");
             }}
             className="mt-1 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-surface-2"
+          >
+            <KeyRound className="size-4" /> Change password
+          </button>
+          <button
+            onClick={() => {
+              setOpen(false);
+              signOut();
+            }}
+            className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-surface-2"
           >
             <LogOut className="size-4" /> Sign out
           </button>

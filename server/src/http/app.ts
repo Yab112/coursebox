@@ -7,6 +7,7 @@ import type { DataSource } from "typeorm";
 import { ZodError } from "zod";
 import type { Config } from "../config";
 import { AppError, unauthorized } from "../errors";
+import { createMailer, type Mailer } from "../mail/Mailer";
 import { AuthService } from "../services/auth";
 import { CourseService } from "../services/courses";
 import { ProgressService } from "../services/progress";
@@ -16,7 +17,7 @@ import { authRoutes } from "./routes/auth";
 import { courseRoutes } from "./routes/courses";
 import { localStorageRoutes } from "./routes/storage";
 
-export type Services = { auth: AuthService; courses: CourseService; progress: ProgressService; storage: Storage };
+export type Services = { auth: AuthService; courses: CourseService; progress: ProgressService; storage: Storage; mailer: Mailer };
 
 declare module "express-serve-static-core" {
   interface Request {
@@ -25,10 +26,11 @@ declare module "express-serve-static-core" {
   }
 }
 
-export function createServices(ds: DataSource, storage: Storage, config: Config): Services {
+export function createServices(ds: DataSource, storage: Storage, config: Config, mailer: Mailer = createMailer(config)): Services {
   const courses = new CourseService(ds, storage, config);
   return {
-    auth: new AuthService(ds, config),
+    mailer,
+    auth: new AuthService(ds, config, mailer),
     courses,
     progress: new ProgressService(ds, courses, config.DATABASE_SCHEMA),
     storage,
@@ -98,7 +100,16 @@ export function createApp(ds: DataSource, services: Services, config: Config) {
     message: { error: { code: "rate_limited", message: "Too many attempts, try again in a few minutes" } },
   });
 
-  app.use("/auth", authLimiter, authRoutes(services, requireUser));
+  // Codes are 6 digits: keep guessing and email sending well below anything useful to an attacker.
+  const resetLimiter = rateLimit({
+    windowMs: 15 * 60_000,
+    limit: config.NODE_ENV === "test" ? 1000 : 10,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    message: { error: { code: "rate_limited", message: "Too many attempts, try again in a few minutes" } },
+  });
+
+  app.use("/auth", authLimiter, authRoutes(services, requireUser, resetLimiter));
   app.use("/", courseRoutes(services, requireUser));
 
   app.use((_req, res) => res.status(404).json({ error: { code: "not_found", message: "Route not found" } }));

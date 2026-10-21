@@ -120,6 +120,10 @@ export const api = {
   signup: (b: { email: string; username: string; password: string }) => call<{ user: ApiUser; token: string }>("POST", "/auth/signup", b),
   login: (b: { identifier: string; password: string }) => call<{ user: ApiUser; token: string }>("POST", "/auth/login", b),
   logout: () => call<void>("POST", "/auth/logout"),
+  forgotPassword: (identifier: string) => call<{ ok: true; message: string }>("POST", "/auth/password/forgot", { identifier }),
+  resetPassword: (b: { identifier: string; code: string; password: string }) =>
+    call<{ user: ApiUser; token: string }>("POST", "/auth/password/reset", b),
+  changePassword: (b: { currentPassword: string; newPassword: string }) => call<void>("POST", "/auth/password/change", b),
   me: () => call<{ user: ApiUser; usage: Usage }>("GET", "/me"),
   listCourses: () => call<{ courses: RemoteCourse[] }>("GET", "/courses"),
   getCourse: (id: string) => call<RemoteCourseDetail>("GET", `/courses/${id}`),

@@ -30,6 +30,19 @@ const schema = z
     SIGNING_SECRET: z.string().min(16).default("dev-only-signing-secret-change-me"),
 
     SESSION_TTL_DAYS: z.coerce.number().int().positive().default(30),
+
+    /**
+     * How emails (password reset codes) are sent. "log" prints them to the server log (development, or until a
+     * provider is set up). "resend" and "brevo" use their HTTPS APIs, which work on hosts that block SMTP ports.
+     */
+    MAIL_DRIVER: z.enum(["log", "resend", "brevo"]).default("log"),
+    /** Sender, e.g. "CourseBox <no-reply@example.com>". */
+    MAIL_FROM: z.string().optional(),
+    RESEND_API_KEY: z.string().optional(),
+    BREVO_API_KEY: z.string().optional(),
+    /** MAIL_DRIVER=log only: also append each email to this file as a JSON line (browser tests). */
+    MAIL_LOG_FILE: z.string().optional(),
+    RESET_CODE_TTL_MINUTES: z.coerce.number().int().min(1).max(60).default(15),
     COURSE_LIMIT: z.coerce.number().int().min(0).default(2),
     MAX_COURSE_BYTES: z.coerce.number().int().positive().default(2 * 1024 ** 3),
     MAX_FILE_BYTES: z.coerce.number().int().positive().default(5 * 1024 ** 3),
@@ -42,11 +55,25 @@ const schema = z
       for (const k of ["S3_BUCKET", "AWS_REGION"] as const)
         if (!c[k]) ctx.addIssue({ code: "custom", path: [k], message: `${k} is required when STORAGE_DRIVER=s3` });
     }
+    if (c.MAIL_DRIVER !== "log") {
+      const key = c.MAIL_DRIVER === "resend" ? "RESEND_API_KEY" : "BREVO_API_KEY";
+      for (const k of ["MAIL_FROM", key] as const)
+        if (!c[k]) ctx.addIssue({ code: "custom", path: [k], message: `${k} is required when MAIL_DRIVER=${c.MAIL_DRIVER}` });
+      if (c.MAIL_FROM && !parseAddress(c.MAIL_FROM))
+        ctx.addIssue({ code: "custom", path: ["MAIL_FROM"], message: 'use "Name <email@example.com>" or "email@example.com"' });
+    }
     if (c.NODE_ENV === "production" && c.SIGNING_SECRET.startsWith("dev-only") && c.STORAGE_DRIVER === "local")
       ctx.addIssue({ code: "custom", path: ["SIGNING_SECRET"], message: "set SIGNING_SECRET in production" });
   });
 
 export type Config = z.infer<typeof schema>;
+
+/** "CourseBox <no-reply@example.com>" or "no-reply@example.com" -> { name?, email } */
+export function parseAddress(from: string): { name?: string; email: string } | null {
+  const m = from.trim().match(/^(?:"?([^"<]*?)"?\s*<([^<>\s]+@[^<>\s]+)>|([^<>\s]+@[^<>\s]+))$/);
+  if (!m) return null;
+  return m[3] ? { email: m[3] } : { name: m[1].trim() || undefined, email: m[2] };
+}
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const parsed = schema.safeParse(env);

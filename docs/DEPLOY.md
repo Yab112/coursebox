@@ -74,6 +74,26 @@ Migrations run automatically on API start (`RUN_MIGRATIONS=true`), or manually w
 
 On Render's free plan the service sleeps after 15 minutes idle; the first request then takes ~30–60 s.
 
+### Password reset emails
+
+"Forgot password?" emails a 6-digit code. Render's free plan blocks outgoing SMTP (ports 25, 465 and 587),
+so CourseBox sends through an email provider's HTTPS API instead. Both of these have free plans:
+
+| Provider | Free plan | Best when |
+| --- | --- | --- |
+| [Resend](https://resend.com) | 3,000 emails/month, 100/day | You own a domain (you verify it with a few DNS records) |
+| [Brevo](https://www.brevo.com) | 300 emails/day | You don't have a domain yet (you can verify a single sender address) |
+
+**Resend:** add and verify your domain under *Domains*, create an API key, then set on Render:
+`MAIL_DRIVER=resend`, `RESEND_API_KEY=re_…`, `MAIL_FROM=CourseBox <no-reply@yourdomain.com>`.
+
+**Brevo:** verify a sender under *Senders, domains & dedicated IPs*, create an API key under *SMTP & API → API keys*,
+then set `MAIL_DRIVER=brevo`, `BREVO_API_KEY=xkeysib-…`, `MAIL_FROM=CourseBox <you@yourdomain.com>`. A sender on a free
+mailbox (Gmail, Outlook) is more likely to land in spam; a domain you own delivers best.
+
+Until one is set up, `MAIL_DRIVER=log` writes each code to the service log (Render → Logs), so you can still
+reset an account by hand. If the provider rejects an email, the error appears in the same log.
+
 ## 4. Vercel (web app)
 
 1. Vercel → **Add New Project** → import this repository (framework: Next.js, root: repository root).

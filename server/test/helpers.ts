@@ -6,6 +6,7 @@ import type { DataSource } from "typeorm";
 import { loadConfig, type Config } from "../src/config";
 import { createDataSource } from "../src/data-source";
 import { createApp, createServices, type Services } from "../src/http/app";
+import { LogMailer } from "../src/mail/Mailer";
 import { LocalStorage } from "../src/storage/LocalStorage";
 
 export const SCHEMA = "coursebox_test";
@@ -17,6 +18,8 @@ export type TestCtx = {
   storage: LocalStorage;
   config: Config;
   storageDir: string;
+  /** Every email the API "sent". */
+  mail: LogMailer;
   close: () => Promise<void>;
   reset: () => Promise<void>;
 };
@@ -36,7 +39,8 @@ export async function createTestContext(overrides: Partial<Record<string, string
   const ds = await createDataSource(config).initialize();
   const storage = new LocalStorage(storageDir, config.PUBLIC_API_URL, config.SIGNING_SECRET);
   await storage.ensureRoot();
-  const services = createServices(ds, storage, config);
+  const mail = new LogMailer(true);
+  const services = createServices(ds, storage, config, mail);
   const app = createApp(ds, services, config);
   return {
     ds,
@@ -45,7 +49,11 @@ export async function createTestContext(overrides: Partial<Record<string, string
     storage,
     config,
     storageDir,
-    reset: () => ds.query(`TRUNCATE "${SCHEMA}".users, "${SCHEMA}".sessions, "${SCHEMA}".courses, "${SCHEMA}".course_files, "${SCHEMA}".progress, "${SCHEMA}".study_days CASCADE`),
+    mail,
+    reset: () => {
+      mail.sent.length = 0;
+      return ds.query(`TRUNCATE "${SCHEMA}".users, "${SCHEMA}".sessions, "${SCHEMA}".courses, "${SCHEMA}".course_files, "${SCHEMA}".progress, "${SCHEMA}".study_days, "${SCHEMA}".password_resets CASCADE`);
+    },
     close: async () => {
       await ds.destroy();
       rmSync(storageDir, { recursive: true, force: true });

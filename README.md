@@ -79,9 +79,12 @@ zip ──► Web Worker (JSZip) ──► IndexedDB files ──► analyzers �
   Progress is keyed by file **path**, so re-analysis and updates keep it.
 - `components/viewers/`: one viewer per file type.
 - `app/page.tsx` + `components/landing/`: the landing page. The library lives at `/library`.
+- `lib/xray.ts` + `lib/xray.worker.ts`: the landing page's X-ray. It runs the real analyzers on a dropped zip
+  in a worker, without storing anything, and shows where every file goes. The sample in `public/samples/` is
+  built from the 6.006 fixture by `npx tsx scripts/build-xray-sample.mts` (re-run it after analyzer changes).
 - `lib/features.ts`: the feature registry the landing page renders. Upcoming features (catalog, AI recaps,
-  short notes, quizzes, highlights) are marked `soon`; flip one to `live` when it ships and it moves to the
-  features grid.
+  short notes, quizzes, highlights) are marked `soon` and listed under "Next term"; flip one to `live` when it
+  ships and it moves into the syllabus list.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to teach CourseBox a new course layout.
 
