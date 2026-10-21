@@ -1,14 +1,14 @@
 "use client";
 import { Download, FileQuestion } from "lucide-react";
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { useFileUrl } from "@/hooks/use-file-url";
 import { basename, dirname, extname } from "@/lib/analyzers/utils";
 import { getFile } from "@/lib/files";
 import { cn, formatBytes } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { CourseHtml, resolvePath } from "./course-html";
+import { CourseHtml } from "./course-html";
+import dynamic from "next/dynamic";
+
+const Markdown = dynamic(() => import("./text/markdown").then((m) => m.Markdown), { ssr: false, loading: () => <div className="skeleton h-40 rounded-xl" /> });
 
 const MAX_TEXT = 2_000_000;
 
@@ -50,60 +50,11 @@ function Loading() {
   );
 }
 
-function CourseImage({ courseId, baseDir, src, alt }: { courseId: string; baseDir: string; src?: string; alt?: string }) {
-  const external = !src || /^(https?:|data:)/i.test(src);
-  const url = useFileUrl(courseId, external ? undefined : resolvePath(baseDir, src!));
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src={external ? src : (url ?? undefined)} alt={alt ?? ""} className="rounded-lg" />;
-}
-
 /** Markdown without its own scroll container (course overview README). */
 export function MarkdownBody({ courseId, path }: { courseId: string; path: string }) {
   const { text } = useFileText(courseId, path);
   if (text === undefined) return <div className="skeleton h-40 rounded-xl" />;
-  const baseDir = dirname(path);
-  return (
-    <div className="prose prose-zinc max-w-none dark:prose-invert prose-a:text-primary prose-headings:tracking-tight prose-code:before:content-none prose-code:after:content-none">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{ img: ({ src, alt }) => <CourseImage courseId={courseId} baseDir={baseDir} src={typeof src === "string" ? src : undefined} alt={alt} /> }}
-      >
-        {text ?? ""}
-      </ReactMarkdown>
-    </div>
-  );
-}
-
-export function MarkdownViewer({ courseId, path, onPath }: { courseId: string; path: string; onPath?: (p: string) => boolean }) {
-  const { text } = useFileText(courseId, path);
-  if (text === undefined) return <Loading />;
-  const baseDir = dirname(path);
-  return (
-    <Reading>
-      <div className="prose prose-zinc max-w-none dark:prose-invert prose-a:text-primary prose-headings:tracking-tight prose-pre:bg-surface-2 prose-pre:text-foreground prose-code:before:content-none prose-code:after:content-none prose-code:rounded prose-code:bg-surface-2 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal">
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={{
-            img: ({ src, alt }) => <CourseImage courseId={courseId} baseDir={baseDir} src={typeof src === "string" ? src : undefined} alt={alt} />,
-            a: ({ href, children }) => (
-              <a
-                href={href}
-                target={href && /^https?:/.test(href) ? "_blank" : undefined}
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  if (href && !/^([a-z]+:|#)/i.test(href) && onPath?.(resolvePath(baseDir, href.split(/[?#]/)[0]))) e.preventDefault();
-                }}
-              >
-                {children}
-              </a>
-            ),
-          }}
-        >
-          {text ?? ""}
-        </ReactMarkdown>
-      </div>
-    </Reading>
-  );
+  return <Markdown text={text ?? ""} courseId={courseId} baseDir={dirname(path)} />;
 }
 
 export function HtmlFileViewer({
@@ -125,71 +76,6 @@ export function HtmlFileViewer({
       <CourseHtml html={body} courseId={courseId} baseDir={dirname(path)} onLesson={onLesson} onPath={onPath} />
     </Reading>
   );
-}
-
-type NbCell = { cell_type: string; source: string | string[]; outputs?: { text?: string | string[]; data?: Record<string, string | string[]> }[] };
-const joinSrc = (s?: string | string[]) => (Array.isArray(s) ? s.join("") : (s ?? ""));
-
-function NotebookViewer({ text }: { text: string }) {
-  let cells: NbCell[] = [];
-  try {
-    cells = JSON.parse(text).cells ?? [];
-  } catch {
-    return <CodeBlock text={text} />;
-  }
-  return (
-    <Reading>
-      <div className="space-y-4">
-        {cells.map((c, i) =>
-          c.cell_type === "markdown" ? (
-            <div key={i} className="prose prose-zinc max-w-none dark:prose-invert">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{joinSrc(c.source)}</ReactMarkdown>
-            </div>
-          ) : (
-            <div key={i} className="overflow-hidden rounded-xl border border-border">
-              <pre className="scrollbar-thin overflow-x-auto bg-surface-2 p-4 font-mono text-[13px] leading-relaxed">{joinSrc(c.source)}</pre>
-              {c.outputs?.map((o, j) => {
-                const png = o.data?.["image/png"];
-                const txt = o.text ?? o.data?.["text/plain"];
-                return png ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={j} alt="" src={`data:image/png;base64,${joinSrc(png)}`} className="bg-white p-2" />
-                ) : txt ? (
-                  <pre key={j} className="scrollbar-thin overflow-x-auto border-t border-border p-4 font-mono text-[12.5px] text-muted">
-                    {joinSrc(txt)}
-                  </pre>
-                ) : null;
-              })}
-            </div>
-          ),
-        )}
-      </div>
-    </Reading>
-  );
-}
-
-function CodeBlock({ text, truncated }: { text: string; truncated?: boolean }) {
-  const lines = text.split("\n");
-  return (
-    <div className="scrollbar-thin h-full overflow-auto bg-surface">
-      <pre className="min-w-fit p-4 font-mono text-[13px] leading-6">
-        {lines.map((l, i) => (
-          <div key={i} className="flex">
-            <span className="mr-4 inline-block w-10 shrink-0 select-none text-right text-subtle">{i + 1}</span>
-            <span className="whitespace-pre">{l || " "}</span>
-          </div>
-        ))}
-        {truncated && <div className="mt-4 text-muted">… file truncated, download to see everything</div>}
-      </pre>
-    </div>
-  );
-}
-
-export function TextViewer({ courseId, path }: { courseId: string; path: string }) {
-  const { text, truncated } = useFileText(courseId, path);
-  if (text === undefined) return <Loading />;
-  if (extname(path) === "ipynb" && text) return <NotebookViewer text={text} />;
-  return <CodeBlock text={text ?? ""} truncated={truncated} />;
 }
 
 export function ImageViewer({ url, alt }: { url: string; alt: string }) {

@@ -35,6 +35,11 @@ async function main() {
 
   const server = app.listen(config.PORT, () => console.log(`CourseBox API on :${config.PORT} (storage: ${config.STORAGE_DRIVER})`));
 
+  // Status page history: one health sample every two minutes while the service is awake.
+  const healthTimer = setInterval(() => services.health.check().catch(() => undefined), 120_000);
+  healthTimer.unref();
+  setTimeout(() => services.health.check().catch(() => undefined), 5_000).unref();
+
   // Housekeeping: abandoned uploads and half-deleted courses.
   const sweep = () => services.courses.cleanup().catch((e) => console.error("cleanup failed", e));
   const timer = setInterval(sweep, 30 * 60_000);

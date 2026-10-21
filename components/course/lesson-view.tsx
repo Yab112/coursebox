@@ -9,10 +9,17 @@ import { downloadFile, openFileInTab, type FlatLesson } from "@/lib/course";
 import { updateProgress, type ProgressRecord } from "@/lib/db";
 import { cn, formatDuration } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { ArchiveViewer } from "../viewers/archive-viewer";
 import { CourseHtml } from "../viewers/course-html";
 import { MediaViewer, YouTubeViewer } from "../viewers/media-viewer";
-import { FallbackViewer, HtmlFileViewer, ImageViewer, MarkdownViewer, TextViewer } from "../viewers/simple-viewers";
+import { FallbackViewer, HtmlFileViewer, ImageViewer } from "../viewers/simple-viewers";
+import { TextSkeleton } from "../viewers/text/skeleton";
+
+// Text viewers (Markdown + math, notebooks, tables, code highlighting) load only when such a file is opened.
+const SmartViewer = dynamic(() => import("../viewers/text/smart-viewer").then((m) => m.SmartViewer), { ssr: false, loading: () => <TextSkeleton /> });
+const ArchiveViewer = dynamic(() => import("../viewers/archive-viewer").then((m) => m.ArchiveViewer), {
+  ssr: false,
+  loading: () => <div className="skeleton h-full w-full" />,
+});
 
 const PdfViewer = dynamic(() => import("../viewers/pdf-viewer"), {
   ssr: false,
@@ -84,15 +91,23 @@ function FileViewer({ courseId, lesson, progress, onComplete, onLesson, onPath, 
     }
     case "image":
       return <ImageViewer url={url!} alt={lesson.title} />;
-    case "markdown":
-      return <MarkdownViewer courseId={courseId} path={path} onPath={onPath} />;
     case "html":
       return <HtmlFileViewer courseId={courseId} path={path} onLesson={onLesson} onPath={onPath} />;
-    case "text":
-      return <TextViewer courseId={courseId} path={path} />;
     default:
       if (/\.zip$/i.test(path)) return <ArchiveViewer courseId={courseId} path={path} />;
-      return <FallbackViewer path={path} size={lesson.meta?.size as number | undefined} onDownload={() => downloadFile(courseId, path)} />;
+      // Markdown, code, notebooks, data, subtitles, and unknown files that turn out to be text.
+      return (
+        <SmartViewer
+          key={path}
+          courseId={courseId}
+          path={path}
+          onPath={onPath}
+          renderHtml={() => <HtmlFileViewer courseId={courseId} path={path} onLesson={onLesson} onPath={onPath} />}
+          renderBinary={(size) => (
+            <FallbackViewer path={path} size={size || (lesson.meta?.size as number | undefined)} onDownload={() => downloadFile(courseId, path)} />
+          )}
+        />
+      );
   }
 }
 

@@ -57,12 +57,16 @@ export type CourseState = {
 /** Seconds studied per day per course (feeds the Phase 3 heatmap). */
 export type ActivityRecord = { day: string; courseId: string; seconds: number };
 
+/** The learner's own edited copy of a course file. The original in `files` is never changed. */
+export type EditRecord = { courseId: string; path: string; text: string; updatedAt: number };
+
 export const db = new Dexie("coursebox") as Dexie & {
   courses: EntityTable<CourseRecord, "id">;
   files: Dexie.Table<FileRecord, [string, string]>;
   progress: Dexie.Table<ProgressRecord, [string, string]>;
   state: EntityTable<CourseState, "courseId">;
   activity: Dexie.Table<ActivityRecord, [string, string]>;
+  edits: Dexie.Table<EditRecord, [string, string]>;
 };
 
 db.version(1).stores({
@@ -75,6 +79,9 @@ db.version(1).stores({
 db.version(2).stores({
   courses: "id, sourceKey, updatedAt, remoteId",
 });
+db.version(3).stores({
+  edits: "[courseId+path], courseId",
+});
 
 /** Progress changes are broadcast so the account sync can pick them up (lib/sync.ts). */
 type ProgressChange = { courseId: string; path: string; patch: Partial<ProgressRecord>; secondsDelta?: number };
@@ -86,8 +93,9 @@ export function onProgressChange(fn: (c: ProgressChange) => void) {
 const emit = (c: ProgressChange) => listeners.forEach((fn) => fn(c));
 
 export async function deleteCourse(courseId: string) {
-  await db.transaction("rw", [db.courses, db.files, db.progress, db.state, db.activity], async () => {
+  await db.transaction("rw", [db.courses, db.files, db.progress, db.state, db.activity, db.edits], async () => {
     await db.files.where("courseId").equals(courseId).delete();
+    await db.edits.where("courseId").equals(courseId).delete();
     await db.progress.where("courseId").equals(courseId).delete();
     await db.activity.where("courseId").equals(courseId).delete();
     await db.state.delete(courseId);

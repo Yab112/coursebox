@@ -2,6 +2,7 @@
  * Builds the course zips used by the e2e suite from committed, license-safe fixtures:
  *  - OCW zips: the real OCW metadata JSON in tests/fixtures/* plus tiny generated PDFs for every listed file
  *  - a generic "folder" course with video + captions, bundled resources, markdown, code, a nested zip and a README
+ *  - a "data science" course with a notebook, CSV, JSON, subtitles, a Makefile and an extensionless script
  */
 import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -76,10 +77,43 @@ async function genericZip(out: string) {
   writeFileSync(path.join(OUT, out), await zip.generateAsync({ type: "nodebuffer" }));
 }
 
+async function viewersZip(out: string) {
+  const zip = new JSZip();
+  const root = zip.folder("Data Science Lab")!;
+  const notebook = {
+    nbformat: 4,
+    nbformat_minor: 5,
+    metadata: { language_info: { name: "python" } },
+    cells: [
+      { cell_type: "markdown", metadata: {}, source: ["# Lab 1\n", "Minimise $f(x)=x^2$:\n", "$$x_{t+1} = x_t - \\eta f'(x_t)$$"] },
+      { cell_type: "code", execution_count: 1, metadata: {}, source: ["print('hello notebook')"], outputs: [{ output_type: "stream", name: "stdout", text: ["hello notebook\n"] }] },
+      {
+        cell_type: "code",
+        execution_count: 2,
+        metadata: {},
+        source: ["df"],
+        outputs: [{ output_type: "execute_result", execution_count: 2, metadata: {}, data: { "text/html": ["<table><tr><th>city</th></tr><tr><td>Addis Ababa</td></tr></table><script>window.__pwned = 1</script>"] } }],
+      },
+      { cell_type: "code", execution_count: 3, metadata: {}, source: ["1/0"], outputs: [{ output_type: "error", ename: "ZeroDivisionError", evalue: "division by zero", traceback: ["\u001b[0;31mZeroDivisionError\u001b[0m: division by zero"] }] },
+    ],
+  };
+  const lab = root.folder("01 - Lab")!;
+  lab.file("01 - lab.ipynb", JSON.stringify(notebook));
+  lab.file("02 - scores.csv", "student,score\nada,91.5\nbob,78\ncarol,88\n");
+  lab.file("03 - config.json", JSON.stringify({ model: "linear", layers: [{ units: 64 }], seed: null }));
+  lab.file("05 - mean.py", "import csv\n\nrows = list(csv.DictReader(open('02 - scores.csv')))\nprint('mean', sum(float(r['score']) for r in rows) / len(rows))\n");
+  lab.file("04 - lecture.srt", "1\n00:00:01,000 --> 00:00:03,000\nWelcome to the lab.\n\n2\n00:01:05,000 --> 00:01:07,000\nNow plot the loss.\n");
+  const tools = root.folder("02 - Tools")!;
+  tools.file("Makefile", "run:\n\tpython train\n");
+  tools.file("train", "#!/usr/bin/env python3\nprint('training')\n");
+  writeFileSync(path.join(OUT, out), await zip.generateAsync({ type: "nodebuffer" }));
+}
+
 export default async function globalSetup() {
   mkdirSync(OUT, { recursive: true });
   await ocwZip("ocw", "ocw-18657.zip");
   await ocwZip("ocw-60001", "ocw-60001.zip");
   await ocwZip("ocw-1806sc", "ocw-1806sc.zip");
   await genericZip("python-crash-course.zip");
+  await viewersZip("data-science-lab.zip");
 }

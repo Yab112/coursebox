@@ -10,6 +10,7 @@ import { AppError, unauthorized } from "../errors";
 import { createMailer, type Mailer } from "../mail/Mailer";
 import { AuthService } from "../services/auth";
 import { CourseService } from "../services/courses";
+import { HealthService } from "../services/health";
 import { ProgressService } from "../services/progress";
 import { LocalStorage } from "../storage/LocalStorage";
 import type { Storage } from "../storage/Storage";
@@ -17,7 +18,7 @@ import { authRoutes } from "./routes/auth";
 import { courseRoutes } from "./routes/courses";
 import { localStorageRoutes } from "./routes/storage";
 
-export type Services = { auth: AuthService; courses: CourseService; progress: ProgressService; storage: Storage; mailer: Mailer };
+export type Services = { auth: AuthService; courses: CourseService; progress: ProgressService; storage: Storage; mailer: Mailer; health: HealthService };
 
 declare module "express-serve-static-core" {
   interface Request {
@@ -34,6 +35,7 @@ export function createServices(ds: DataSource, storage: Storage, config: Config,
     courses,
     progress: new ProgressService(ds, courses, config.DATABASE_SCHEMA),
     storage,
+    health: new HealthService(ds, storage, config),
   };
 }
 
@@ -89,6 +91,16 @@ export function createApp(ds: DataSource, services: Services, config: Config) {
     h(async (_req, res) => {
       await ds.query("SELECT 1");
       res.json({ ok: true });
+    }),
+  );
+
+  // Public, for the status page. Cached in the service, so polling it doesn't touch the database each time.
+  app.get(
+    "/status",
+    rateLimit({ windowMs: 60_000, limit: config.NODE_ENV === "test" ? 1000 : 60, standardHeaders: "draft-8", legacyHeaders: false }),
+    h(async (_req, res) => {
+      const report = await services.health.report();
+      res.set("Cache-Control", "no-store").status(report.components.find((c) => c.id === "database")?.status === "outage" ? 503 : 200).json(report);
     }),
   );
 

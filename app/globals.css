@@ -203,3 +203,31 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* Code (Shiki). Light colours inline; dark mode swaps to the --shiki-dark variables. */
+.code-view pre.shiki { background: transparent !important; margin: 0; }
+.code-view .line { display: inline; }
+.code-numbers pre.shiki code { counter-reset: line; }
+.code-numbers pre.shiki .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.75rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: var(--subtle);
+  user-select: none;
+}
+.code-wrap pre.shiki { white-space: pre-wrap; word-break: break-word; }
+.code-wrap.code-numbers pre.shiki .line { display: block; padding-left: 3.75rem; text-indent: -3.75rem; }
+.dark .shiki, .dark .shiki span { color: var(--shiki-dark) !important; }
+
+/* Notebook HTML outputs (pandas tables etc.) */
+.nb-html table { border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.nb-html th, .nb-html td { border: 1px solid var(--border); padding: 0.3rem 0.6rem; text-align: right; }
+.nb-html thead th, .nb-html tbody th { background: var(--surface-2); font-weight: 600; }
+.nb-html tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--surface-2) 40%, transparent); }
+
+/* Status page: outage colour and the chart's categorical series (validated slots 1-3). */
+:root { --danger: #dc2626; --danger-soft: #fdecec; --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; }
+.dark { --danger: #f87171; --danger-soft: #2a1515; --s1: #3987e5; --s2: #d95926; --s3: #199e70; }

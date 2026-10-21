@@ -3,13 +3,13 @@ import JSZip from "jszip";
 import { ChevronLeft, Download, FolderArchive } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { basename, extname, fileType, isJunk, mimeType, naturalCompare } from "@/lib/analyzers/utils";
 import { getFile } from "@/lib/files";
+import { looksBinary } from "@/lib/filetype";
 import { formatBytes } from "@/lib/utils";
 import { FileIcon } from "../file-icon";
 import { Button } from "../ui/button";
+import { TextContent } from "./text/smart-viewer";
 
 const PdfViewer = dynamic(() => import("./pdf-viewer"), { ssr: false, loading: () => <div className="skeleton h-full w-full" /> });
 
@@ -53,8 +53,11 @@ export function ArchiveViewer({ courseId, path }: { courseId: string; path: stri
     let url: string | undefined;
     const t = fileType(open.name);
     (async () => {
-      if (["markdown", "text", "html"].includes(t)) setContent({ text: await open.file.async("string") });
-      else {
+      if (!["pdf", "image", "video", "audio"].includes(t)) {
+        const bytes = await open.file.async("uint8array");
+        if (!looksBinary(bytes.subarray(0, 8192))) return setContent({ text: new TextDecoder().decode(bytes.subarray(0, 2_000_000)) });
+        setContent({});
+      } else {
         const blob = new Blob([await open.file.async("blob")], { type: mimeType(open.name) });
         url = URL.createObjectURL(blob);
         setContent({ url });
@@ -104,14 +107,8 @@ export function ArchiveViewer({ courseId, path }: { courseId: string; path: stri
             <img src={content.url} alt="" className="m-auto max-h-full max-w-full object-contain p-6" />
           ) : (t === "video" || t === "audio") && content.url ? (
             <video src={content.url} controls className="h-full w-full bg-black" />
-          ) : t === "markdown" ? (
-            <div className="scrollbar-thin h-full overflow-auto">
-              <article className="prose prose-zinc mx-auto max-w-3xl px-6 py-8 dark:prose-invert">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{content.text ?? ""}</ReactMarkdown>
-              </article>
-            </div>
           ) : content.text !== undefined ? (
-            <pre className="scrollbar-thin h-full overflow-auto bg-surface p-4 font-mono text-[13px] leading-6">{content.text}</pre>
+            <TextContent text={content.text} path={open.name} truncated={open.size > 2_000_000} />
           ) : (
             <div className="grid h-full place-items-center p-6">
               <Button onClick={() => download(open)}>

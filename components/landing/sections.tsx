@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { featuresBy } from "@/lib/features";
+import { featuresBy, STATUS_LABEL } from "@/lib/features";
 import { UploadButton } from "./importer";
 import { GITHUB_URL, Marker, Section } from "./primitives";
 import { LibraryLink } from "./site-nav";
@@ -17,7 +17,7 @@ export function Syllabus() {
       }
     >
       <ol className="border-t border-ink">
-        {featuresBy("live").map((f, i) => (
+        {featuresBy("live").filter((f) => f.landing !== false).map((f, i) => (
           <li key={f.id} className="grid gap-2 border-b border-rule py-6 sm:grid-cols-[5rem_1fr_1.4fr] sm:gap-6 sm:py-8">
             <span className="font-display text-4xl leading-none text-ink-3 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
             <h3 className="text-lg font-semibold leading-snug">{f.title}</h3>
@@ -109,12 +109,15 @@ export function NextTerm() {
           </tr>
         </thead>
         <tbody>
-          {featuresBy("soon").map((f) => (
+          {[...featuresBy("building"), ...featuresBy("soon")].map((f) => (
             <tr key={f.id} className="grid border-b border-rule py-5 sm:table-row sm:py-0">
               <td className="align-top font-semibold sm:w-[30%] sm:py-6 sm:pr-6">{f.title}</td>
               <td className="mt-1 align-top leading-relaxed text-ink-2 sm:mt-0 sm:py-6 sm:pr-6">{f.description}</td>
-              <td className="mt-3 align-top font-code text-[11px] tracking-wide whitespace-nowrap text-ink-3 uppercase sm:mt-0 sm:w-28 sm:py-7 sm:text-right">
-                Planned
+              <td
+                className={`mt-3 align-top font-code text-[11px] tracking-wide whitespace-nowrap uppercase sm:mt-0 sm:w-28 sm:py-7 sm:text-right ${f.status === "building" ? "text-ink" : "text-ink-3"}`}
+              >
+                {f.status === "building" && <span className="landing-marker">{STATUS_LABEL[f.status]}</span>}
+                {f.status !== "building" && STATUS_LABEL[f.status]}
               </td>
             </tr>
           ))}
@@ -203,6 +206,9 @@ export function Colophon() {
         <nav aria-label="Footer" className="flex gap-6">
           <Link href="/library" className="hover:text-ink">
             Library
+          </Link>
+          <Link href="/status" className="hover:text-ink">
+            Status
           </Link>
           <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="hover:text-ink">
             GitHub ↗

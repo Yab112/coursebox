@@ -5,7 +5,7 @@ import type { LessonType } from "@/lib/analyzers/types";
 import type { FlatLesson } from "@/lib/course";
 import type { CourseRecord, ProgressRecord } from "@/lib/db";
 import { cn, formatBytes, formatDuration } from "@/lib/utils";
-import { FileIcon, TYPE_LABEL } from "../file-icon";
+import { fileKind, KindIcon } from "../file-icon";
 import { CourseCover } from "../library/course-card";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
@@ -42,10 +42,16 @@ export function CourseHome({
   const seconds = lessons.reduce((n, l) => n + (progress.get(l.path)?.seconds ?? 0), 0);
   const started = lessons.some((l) => progress.get(l.path)?.lastOpenedAt || progress.get(l.path)?.completed);
 
+  // Grouped by what the files are ("Notebook", "Python", "CSV"), not just the broad lesson type.
   const typeCounts = useMemo(() => {
-    const c = new Map<LessonType, number>();
-    for (const l of lessons) c.set(l.type, (c.get(l.type) ?? 0) + 1);
-    return [...c.entries()].sort((a, b) => b[1] - a[1]);
+    const c = new Map<string, { n: number; path: string; type: LessonType }>();
+    for (const l of lessons) {
+      const label = l.path.startsWith("youtube:") ? "Video" : fileKind(l.path, l.type).label;
+      const e = c.get(label);
+      if (e) e.n++;
+      else c.set(label, { n: 1, path: l.path, type: l.type });
+    }
+    return [...c.entries()].sort((a, b) => b[1].n - a[1].n);
   }, [lessons]);
 
   const reanalyze = async () => {
@@ -226,7 +232,7 @@ export function CourseHome({
                                   onClick={() => onOpen(l.id)}
                                   className="flex w-full items-center gap-3 px-5 py-2 pl-[4.25rem] text-left text-sm hover:bg-surface-2"
                                 >
-                                  <FileIcon type={l.type} className="text-muted" />
+                                  <KindIcon path={l.path} type={l.type} className="text-muted" />
                                   <span className="min-w-0 flex-1 truncate">{l.title}</span>
                                   {status === "started" && <StatusBadge status={status} />}
                                   {status === "done" && <CheckCircle2 className="size-4 shrink-0 text-success" />}
@@ -249,12 +255,11 @@ export function CourseHome({
                   <GraduationCap className="size-4 text-primary" /> This course includes
                 </h3>
                 <ul className="space-y-2.5 text-sm">
-                  {typeCounts.map(([t, n]) => (
-                    <li key={t} className="flex items-center gap-2.5 text-muted">
-                      <FileIcon type={t} className="text-foreground" />
+                  {typeCounts.map(([label, { n, path, type }]) => (
+                    <li key={label} className="flex items-center gap-2.5 text-muted">
+                      <KindIcon path={path} type={type} className="text-foreground" />
                       <span>
-                        <span className="font-medium text-foreground">{n}</span> {TYPE_LABEL[t]}
-                        {n === 1 ? "" : "s"}
+                        <span className="font-medium text-foreground">{n}</span> {countLabel(label, n)}
                       </span>
                     </li>
                   ))}
@@ -292,4 +297,12 @@ export function CourseHome({
       </div>
     </div>
   );
+}
+
+const PLURAL = new Set(["PDF", "Video", "Audio", "Image", "Page", "Reading", "Notebook", "Text", "File"]);
+/** "3 PDFs", "2 Notebooks", but "1 Python file", "4 CSV files". */
+function countLabel(label: string, n: number) {
+  if (PLURAL.has(label)) return n === 1 ? label : `${label}s`;
+  if (label === "Subtitles") return n === 1 ? "subtitle file" : "subtitle files";
+  return `${label} file${n === 1 ? "" : "s"}`;
 }
