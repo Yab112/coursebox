@@ -1,6 +1,10 @@
+import os from "node:os";
+import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = Number(process.env.PORT ?? 3210);
+/** Emails the test API "sends" (password reset codes), one JSON line each. */
+export const MAIL_LOG = path.join(os.tmpdir(), `coursebox-e2e-mail-${PORT}.log`);
 
 export default defineConfig({
   testDir: "e2e",
@@ -25,7 +29,7 @@ export default defineConfig({
       // Throwaway API + Postgres (Docker locally, E2E_DATABASE_URL in CI) with local file storage.
       command: "./server/scripts/e2e-api.sh",
       url: `http://localhost:${process.env.E2E_API_PORT ?? 4100}/health`,
-      env: { E2E_WEB_ORIGIN: `http://localhost:${PORT}` },
+      env: { E2E_WEB_ORIGIN: `http://localhost:${PORT}`, E2E_MAIL_LOG: MAIL_LOG },
       reuseExistingServer: false,
       timeout: 120_000,
       gracefulShutdown: { signal: "SIGTERM", timeout: 10_000 },

@@ -1,9 +1,10 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import type { Config } from "./config";
-import { Course, CourseFile, Progress, Session, StudyDay, User } from "./entities";
+import { Course, CourseFile, PasswordReset, Progress, Session, StudyDay, User } from "./entities";
 import { Init1760400000000 } from "./migrations/1760400000000-Init";
 import { CourseClientRef1760500000000 } from "./migrations/1760500000000-CourseClientRef";
+import { PasswordResets1760600000000 } from "./migrations/1760600000000-PasswordResets";
 
 export function createDataSource(config: Pick<Config, "DATABASE_URL" | "DATABASE_SSL" | "DATABASE_SCHEMA" | "NODE_ENV">) {
   return new DataSource({
@@ -11,8 +12,8 @@ export function createDataSource(config: Pick<Config, "DATABASE_URL" | "DATABASE
     url: config.DATABASE_URL,
     schema: config.DATABASE_SCHEMA,
     ssl: config.DATABASE_SSL ? { rejectUnauthorized: false } : false,
-    entities: [User, Session, Course, CourseFile, Progress, StudyDay],
-    migrations: [Init1760400000000, CourseClientRef1760500000000],
+    entities: [User, Session, Course, CourseFile, Progress, StudyDay, PasswordReset],
+    migrations: [Init1760400000000, CourseClientRef1760500000000, PasswordResets1760600000000],
     migrationsTableName: "migrations",
     synchronize: false,
     logging: config.NODE_ENV === "development" ? ["error", "warn", "migration"] : ["error", "migration"],

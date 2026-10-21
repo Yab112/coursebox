@@ -28,6 +28,8 @@ async function main() {
   }
   const storage = createStorage(config);
   if (storage instanceof LocalStorage) await storage.ensureRoot();
+  if (config.MAIL_DRIVER === "log" && config.NODE_ENV === "production")
+    console.warn("MAIL_DRIVER=log: password reset codes are written to this log instead of being emailed. Set up Resend or Brevo.");
   const services = createServices(ds, storage, config);
   const app = createApp(ds, services, config);
 

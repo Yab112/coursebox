@@ -13,7 +13,7 @@ async function fillSignup(page: Page, c: ReturnType<typeof credentials>) {
   const dlg = page.getByRole("dialog", { name: "Create your account" });
   await dlg.getByLabel("Email").fill(c.email);
   await dlg.getByLabel("Username").fill(c.username);
-  await dlg.getByLabel("Password").fill(c.password);
+  await dlg.getByLabel("Password", { exact: true }).fill(c.password);
   await dlg.getByRole("button", { name: "Create account" }).click();
   await expect(dlg).toBeHidden();
 }
@@ -32,7 +32,7 @@ async function signIn(page: Page, identifier: string, password: string) {
   await page.getByRole("button", { name: "Sign in" }).click();
   const dlg = page.getByRole("dialog", { name: "Sign in" });
   await dlg.getByLabel("Email or username").fill(identifier);
-  await dlg.getByLabel("Password").fill(password);
+  await dlg.getByLabel("Password", { exact: true }).fill(password);
   await dlg.getByRole("button", { name: "Sign in" }).click();
   await expect(dlg).toBeHidden();
 }
@@ -133,7 +133,7 @@ test("sign-up and sign-in explain what went wrong", async ({ page }) => {
   const dlg = page.getByRole("dialog", { name: "Create your account" });
   await dlg.getByLabel("Email").fill(c.email.toUpperCase());
   await dlg.getByLabel("Username").fill(`other_${unique()}`);
-  await dlg.getByLabel("Password").fill("another-password");
+  await dlg.getByLabel("Password", { exact: true }).fill("another-password");
   await dlg.getByRole("button", { name: "Create account" }).click();
   await expect(dlg.getByRole("alert")).toHaveText("An account with this email already exists");
   await dlg.getByRole("button", { name: "Close" }).click();
@@ -141,10 +141,10 @@ test("sign-up and sign-in explain what went wrong", async ({ page }) => {
   await page.getByRole("button", { name: "Sign in" }).click();
   const login = page.getByRole("dialog", { name: "Sign in" });
   await login.getByLabel("Email or username").fill(c.email);
-  await login.getByLabel("Password").fill("wrong-password");
+  await login.getByLabel("Password", { exact: true }).fill("wrong-password");
   await login.getByRole("button", { name: "Sign in" }).click();
   await expect(login.getByRole("alert")).toHaveText("Wrong email/username or password");
-  await login.getByLabel("Password").fill(c.password);
+  await login.getByLabel("Password", { exact: true }).fill(c.password);
   await login.getByRole("button", { name: "Sign in" }).click();
   await expect(page.getByRole("button", { name: "Account menu" })).toBeVisible();
 });

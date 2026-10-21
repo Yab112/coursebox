@@ -18,7 +18,7 @@ describe("schema guarantees (enforced by Postgres, not just the API)", () => {
        WHERE n.nspname = $1 AND c.relkind = 'r' AND c.relname <> 'migrations' ORDER BY 1`,
       [SCHEMA],
     );
-    expect(rows.map((r: { relname: string }) => r.relname)).toEqual(["course_files", "courses", "progress", "sessions", "study_days", "users"]);
+    expect(rows.map((r: { relname: string }) => r.relname)).toEqual(["course_files", "courses", "password_resets", "progress", "sessions", "study_days", "users"]);
     expect(rows.every((r: { relrowsecurity: boolean }) => r.relrowsecurity)).toBe(true);
   });
 
@@ -60,11 +60,15 @@ describe("schema guarantees (enforced by Postgres, not just the API)", () => {
       (await ctx.ds.query(`SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema = $1 AND table_name = 'users'`, [SCHEMA]))[0].n;
     const clientRef = async () =>
       (await ctx.ds.query(`SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema = $1 AND table_name = 'courses' AND column_name = 'client_ref'`, [SCHEMA]))[0].n;
+    const resets = async () =>
+      (await ctx.ds.query(`SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema = $1 AND table_name = 'password_resets'`, [SCHEMA]))[0].n;
+    await ctx.ds.undoLastMigration({ transaction: "each" });
+    expect([await tables(), await clientRef(), await resets()]).toEqual([1, 1, 0]);
     await ctx.ds.undoLastMigration({ transaction: "each" });
     expect([await tables(), await clientRef()]).toEqual([1, 0]);
     await ctx.ds.undoLastMigration({ transaction: "each" });
     expect(await tables()).toBe(0);
     await ctx.ds.runMigrations({ transaction: "each" });
-    expect([await tables(), await clientRef()]).toEqual([1, 1]);
+    expect([await tables(), await clientRef(), await resets()]).toEqual([1, 1, 1]);
   });
 });
